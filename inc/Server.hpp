@@ -6,7 +6,7 @@
 /*   By: theoappourchaux <theoappourchaux@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/29 10:49:15 by tappourc          #+#    #+#             */
-/*   Updated: 2024/09/04 19:49:59 by theoappourc      ###   ########.fr       */
+/*   Updated: 2024/09/05 19:49:06 by theoappourc      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,14 +18,14 @@
 class Server {
 
 	private:
-		int						port;
-		int						client_max;
-		int						sock_serv;
+		int						_port;
+		int						_client_max;
+		int						_sock_serv;
 
-		std::string				password;
-		std::string				hostname;
+		std::string				_password;
+		std::string				_hostname;
 
-		struct sockaddr_in		addr;
+		struct sockaddr_in		_addr;
 
 		// need to create other class
 		// std::vector<Client>		clients;

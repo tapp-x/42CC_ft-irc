@@ -6,16 +6,16 @@
 /*   By: theoappourchaux <theoappourchaux@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/29 10:49:41 by tappourc          #+#    #+#             */
-/*   Updated: 2024/09/04 19:54:50 by theoappourc      ###   ########.fr       */
+/*   Updated: 2024/09/05 19:51:28 by theoappourc      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/Server.hpp"
 
 Server::Server(){
-	this->port = 0;
-	this->client_max = 0;
-	this->sock_serv = -1;
+	this->_port = 0;
+	this->_client_max = 0;
+	this->_sock_serv = -1;
 }
 
 Server::~Server(){}
@@ -26,10 +26,10 @@ Server::Server(const Server &server) {
 
 Server &Server::operator=(const Server &server) {
 	if (this != &server) {
-		port = server.port;
-		client_max = server.client_max;
-		sock_serv = server.sock_serv;
-		addr = server.addr;
+		_port = server._port;
+		_client_max = server._client_max;
+		_sock_serv = server._sock_serv;
+		_addr = server._addr;
 		// need to create other class
 		// clients = server.clients;
 		// channels = server.channels;
@@ -39,37 +39,67 @@ Server &Server::operator=(const Server &server) {
 
 // ALL SETTERS
 void	Server::init(int port, int maxclient, std::string password, std::string hostname){
-	this->port = port;
-	this->client_max = maxclient;
-	this->password = password;
-	this->hostname = hostname;
+	this->_port = port;
+	this->_client_max = maxclient;
+	this->_password = password;
+	this->_hostname = hostname;
+
+	this->set_sockserv();
+	//TBC
 }
 
 void	Server::set_port(int port){
-	this->port = port;
+	this->_port = port;
 }
 
 void	Server::set_clientmax(int clientmax){
-	this->client_max = clientmax;
+	this->_client_max = clientmax;
 }
 
-// void	Server::set_sockserv(){
-	
-// }
+void	Server::set_sockserv(){
+	this->_sock_serv = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+	if (this->_sock_serv < 0)
+	{
+		std::cout << "Failed at socket(serv) creation" << std::endl;
+		return ;
+		// throw exception error (TBD)
+	}
+	std::cout << "socket(serv) value: " << this->_sock_serv << std::endl;
+
+	this->_addr.sin_addr.s_addr = INADDR_ANY;
+	this->_addr.sin_family = AF_INET;
+	this->_addr.sin_port = htons(this->_port);
+	std::cout << "server created at port: " << this->_addr.sin_port << " real value: " << _port << std::endl;
+
+	if (bind(this->_sock_serv, (struct sockaddr *)&this->_addr, sizeof(this->_addr)) == -1)
+	{
+		std::cout << "Failed at socket(serv) bind: " << strerror(errno) << std::endl;
+		close(this->_sock_serv);
+		return ;
+		// throw exception error (TBD)
+	}
+	if (listen(this->_sock_serv, this->_client_max) == -1)
+	{
+		std::cout << "Failed at socket(serv) listen: " << strerror(errno) << std::endl;
+		close(this->_sock_serv);
+		return ;
+		// throw exception error (TBD)
+	}
+}
 
 // ALL GETTERS
 int	Server::get_port() {
-	return (this->port);	
+	return (this->_port);	
 }
 
 int	Server::get_sockserv() {
-	return (this->sock_serv);	
+	return (this->_sock_serv);	
 }
 
 std::string	Server::get_password() {
-	return (this->password);	
+	return (this->_password);	
 }
 
 std::string	Server::get_hostname() {
-	return (this->hostname);	
+	return (this->_hostname);	
 }
