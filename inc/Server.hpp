@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: theoappourchaux <theoappourchaux@studen    +#+  +:+       +#+        */
+/*   By: tappourc <tappourc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/29 10:49:15 by tappourc          #+#    #+#             */
-/*   Updated: 2024/09/05 19:49:06 by theoappourc      ###   ########.fr       */
+/*   Created: 2024/09/17 18:15:45 by tappourc          #+#    #+#             */
+/*   Updated: 2024/09/20 11:56:26 by tappourc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,11 @@ class Server {
 
 		struct sockaddr_in		_addr;
 
-		// need to create other class
-		// std::vector<Client>		clients;
-		// std::vector<Channel>	channels;
+		std::vector<Client>		_clients;
+		// std::vector<Channel>		_channels;
+
+		struct pollfd 				_new_cli;
+		std::vector<struct pollfd>	_pollfds;
 
 	public:
 		// BASICS

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: theoappourchaux <theoappourchaux@studen    +#+  +:+       +#+        */
+/*   By: tappourc <tappourc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/29 10:49:41 by tappourc          #+#    #+#             */
-/*   Updated: 2024/09/05 19:51:28 by theoappourc      ###   ########.fr       */
+/*   Updated: 2024/09/20 11:59:33 by tappourc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ Server &Server::operator=(const Server &server) {
 		_client_max = server._client_max;
 		_sock_serv = server._sock_serv;
 		_addr = server._addr;
+		_pollfds = server.pollfds;
 		// need to create other class
 		// clients = server.clients;
 		// channels = server.channels;
@@ -38,7 +39,7 @@ Server &Server::operator=(const Server &server) {
 	return (*this);
 }
 
-// ALL SETTERS
+//LAUNCH SERV
 void	Server::init(int port, int maxclient, std::string password, std::string hostname){
 	this->_port = port;
 	this->_client_max = maxclient;
@@ -46,15 +47,28 @@ void	Server::init(int port, int maxclient, std::string password, std::string hos
 	this->_hostname = hostname;
 
 	this->set_sockserv();
-	//TBC
-}
 
-void	Server::set_port(int port){
-	this->_port = port;
-}
-
-void	Server::set_clientmax(int clientmax){
-	this->_client_max = clientmax;
+	// pursue with poll etc
+	this->_new_cli.fd = _sock_serv;
+	this->_new_cli.events = POLLIN;
+	this->_new_cli.revents = 0;
+	_pollfds.push_back(_new_cli);
+	
+	std::cout << "server running ..." << std::endl;
+	while(this->_sig == false)
+	{
+		if (poll(&_pollfds[0], _pollfds.size(), -1) == -1) // error occurs in poll
+			throw ServerException("poll() error");
+		for (size_t i = 0; i < _pollfds.size(); i++)
+		{
+			if (_pollfds[i].revents & POLLIN)
+			{
+				// if event occurs here, check if its new user or not
+				// if its a new user, add it
+				// if not handle buffer to choose action (del usr or exec cmd)
+			}
+		}
+	}
 }
 
 void	Server::set_sockserv(){
@@ -94,19 +108,19 @@ void	Server::set_clientmax(int clientmax){
 
 // ALL GETTERS
 int	Server::get_port() {
-	return (this->_port);	
+	return (this->_port);
 }
 
 int	Server::get_sockserv() {
-	return (this->_sock_serv);	
+	return (this->_sock_serv);
 }
 
 std::string	Server::get_password() {
-	return (this->_password);	
+	return (this->_password);
 }
 
 std::string	Server::get_hostname() {
-	return (this->_hostname);	
+	return (this->_hostname);
 }
 
 // METHODS
