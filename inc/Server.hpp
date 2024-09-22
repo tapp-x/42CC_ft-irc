@@ -49,7 +49,10 @@ class Server {
 		int				get_sockserv();
 		std::string		get_password();
 		std::string		get_hostname();
-		
-}
+		class ServerException : public Except {
+			public:
+				ServerException(std::string message) : Except("Server error", message) {}
+		};
+};
 
 #endif

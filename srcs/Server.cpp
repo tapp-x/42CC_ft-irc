@@ -59,32 +59,28 @@ void	Server::set_clientmax(int clientmax){
 void	Server::set_sockserv(){
 	this->_sock_serv = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 	if (this->_sock_serv < 0)
-	{
-		std::cout << "Failed at socket(serv) creation" << std::endl;
-		return ;
-		// throw exception error (TBD)
-	}
+		throw ServerException("Failed at socket creation");
+	
 	std::cout << "socket(serv) value: " << this->_sock_serv << std::endl;
 
 	this->_addr.sin_addr.s_addr = INADDR_ANY;
 	this->_addr.sin_family = AF_INET;
 	this->_addr.sin_port = htons(this->_port);
+	
 	std::cout << "server created at port: " << this->_addr.sin_port << " real value: " << _port << std::endl;
+
+	if (fcntl(this->_sock_serv, F_SETFL, O_NONBLOCK) == -1)
+		throw ServerException("Failed at socket fcntl");
 
 	if (bind(this->_sock_serv, (struct sockaddr *)&this->_addr, sizeof(this->_addr)) == -1)
 	{
-		std::cout << "Failed at socket(serv) bind: " << strerror(errno) << std::endl;
-		close(this->_sock_serv);
-		return ;
-		// throw exception error (TBD)
+		std::cout << errno << std::endl;
+		throw ServerException("Failed at socket bind");
 	}
+	
 	if (listen(this->_sock_serv, this->_client_max) == -1)
-	{
-		std::cout << "Failed at socket(serv) listen: " << strerror(errno) << std::endl;
-		close(this->_sock_serv);
-		return ;
-		// throw exception error (TBD)
-	}
+		throw ServerException("Failed at socket listen");
+}
 }
 
 // ALL GETTERS

@@ -43,6 +43,7 @@
 
 // MY HPP FILES
 // #include "Client.hpp"
-// #include "Server.hpp"
+#include "Exception.hpp"
+#include "Server.hpp"
 
 #endif
