@@ -22,6 +22,8 @@ class Server {
 		int						_client_max;
 		int						_sock_serv;
 
+		static bool				_sig;
+
 		std::string				_password;
 		std::string				_hostname;
 
@@ -49,6 +51,11 @@ class Server {
 		int				get_sockserv();
 		std::string		get_password();
 		std::string		get_hostname();
+
+		//METHODS
+		static void		sigHandler(int signum);
+		void			close_serv():
+		
 		class ServerException : public Except {
 			public:
 				ServerException(std::string message) : Except("Server error", message) {}

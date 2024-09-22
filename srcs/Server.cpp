@@ -13,6 +13,7 @@
 #include "../inc/Server.hpp"
 
 Server::Server(){
+	this->_sig = false;
 	this->_port = 0;
 	this->_client_max = 0;
 	this->_sock_serv = -1;
@@ -81,6 +82,14 @@ void	Server::set_sockserv(){
 	if (listen(this->_sock_serv, this->_client_max) == -1)
 		throw ServerException("Failed at socket listen");
 }
+
+// ALL SETTERS
+void	Server::set_port(int port){
+	this->_port = port;
+}
+
+void	Server::set_clientmax(int clientmax){
+	this->_client_max = clientmax;
 }
 
 // ALL GETTERS
@@ -98,4 +107,23 @@ std::string	Server::get_password() {
 
 std::string	Server::get_hostname() {
 	return (this->_hostname);	
+}
+
+// METHODS
+bool Server::_sig = false;
+void	Server::sigHandler(int signum) {
+	(void)signum;
+	std::cout << std::endl << "Signal Received!" << std::endl;
+	Server::_sig = true;
+}
+
+void	Server::close_serv() {
+	for (int i = 0; i < _clients.size(); i++) {
+		std::cout << _clients[i].get_fd() << " : this Client is now disconected" << std::endl;
+		if (_clients[i].get_fd() != -1)
+			close(_clients[i].get_fd());
+	}
+	if(_sock_serv != -1)
+		close(_sock_serv);
+	std::cout << "Server closed" << std::endl;
 }
