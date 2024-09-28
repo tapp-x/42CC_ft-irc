@@ -6,7 +6,7 @@
 /*   By: tappourc <tappourc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 18:15:45 by tappourc          #+#    #+#             */
-/*   Updated: 2024/09/20 11:56:26 by tappourc         ###   ########.fr       */
+/*   Updated: 2024/09/28 10:11:22 by tappourc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 #define SERVER_HPP
 
 #include "irc.hpp"
+
+class Client;
 
 class Server {
 
@@ -56,7 +58,9 @@ class Server {
 
 		//METHODS
 		static void		sigHandler(int signum);
-		void			close_serv():
+		void			close_serv();
+		void			add_client();
+		void			rmv_client(int fd);
 		
 		class ServerException : public Except {
 			public:

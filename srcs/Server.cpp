@@ -6,11 +6,11 @@
 /*   By: tappourc <tappourc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/29 10:49:41 by tappourc          #+#    #+#             */
-/*   Updated: 2024/09/20 11:59:33 by tappourc         ###   ########.fr       */
+/*   Updated: 2024/09/28 10:35:41 by tappourc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/Server.hpp"
+#include "../inc/irc.hpp"
 
 Server::Server(){
 	this->_sig = false;
@@ -31,7 +31,7 @@ Server &Server::operator=(const Server &server) {
 		_client_max = server._client_max;
 		_sock_serv = server._sock_serv;
 		_addr = server._addr;
-		_pollfds = server.pollfds;
+		_pollfds = server._pollfds;
 		// need to create other class
 		// clients = server.clients;
 		// channels = server.channels;
@@ -40,7 +40,7 @@ Server &Server::operator=(const Server &server) {
 }
 
 //LAUNCH SERV
-void	Server::init(int port, int maxclient, std::string password, std::string hostname){
+void	Server::init(int port, int maxclient, std::string password, std::string hostname) {
 	this->_port = port;
 	this->_client_max = maxclient;
 	this->_password = password;
@@ -61,14 +61,28 @@ void	Server::init(int port, int maxclient, std::string password, std::string hos
 			throw ServerException("poll() error");
 		for (size_t i = 0; i < _pollfds.size(); i++)
 		{
-			if (_pollfds[i].revents & POLLIN)
+			if (_pollfds[i].revents == 0 && this->_sig == false) // nothing happen here just continue
+				continue ;
+			if (_pollfds[i].revents & POLLIN) // there is data to read in this section
 			{
-				// if event occurs here, check if its new user or not
-				// if its a new user, add it
-				// if not handle buffer to choose action (del usr or exec cmd)
+				if (_pollfds[i].fd == this->get_sockserv())
+				{
+					add_client();
+					break;
+				}
+				// else
+				// 	std::cout << "new msg from : " << _pollfds[i].fd << std::endl;
+				// this->start_exec(with the msg / buffer or fd)
+			}
+			if (_pollfds[i].revents & POLLHUP) // deconnection requested for this client
+			{
+				std::cout << _pollfds[i].fd << " want a deconexion" << std::endl;
+				rmv_client(_pollfds[i].fd);
+				break ;
 			}
 		}
 	}
+	this->close_serv();
 }
 
 void	Server::set_sockserv(){
@@ -132,12 +146,49 @@ void	Server::sigHandler(int signum) {
 }
 
 void	Server::close_serv() {
-	for (int i = 0; i < _clients.size(); i++) {
+	for (size_t i = 0; i < _clients.size(); i++) {
 		std::cout << _clients[i].get_fd() << " : this Client is now disconected" << std::endl;
-		if (_clients[i].get_fd() != -1)
+		if (_clients[i].get_fd() != -1) {
+			// std::cout << _clients[i].get_fd() << " client closed" << std::endl;
 			close(_clients[i].get_fd());
+		}
 	}
 	if(_sock_serv != -1)
 		close(_sock_serv);
 	std::cout << "Server closed" << std::endl;
+}
+
+void	Server::add_client() {
+	int			fd;
+	sockaddr_in	addr = {};
+	socklen_t	size = sizeof(addr);
+
+	fd = accept(this->get_sockserv(), (sockaddr *) &addr, &size);
+	if (fd < 0)
+		throw ServerException("Failed at accepting new client");
+	if (fcntl(fd, F_SETFL, O_NONBLOCK) == -1)
+		throw ServerException("Failed at socket fcntl");
+
+	pollfd new_pfd;
+	new_pfd.fd = fd;
+	new_pfd.events = POLLIN;
+	new_pfd.revents = 0;
+	_pollfds.push_back(new_pfd);
+
+	Client newcli;
+	newcli.set_fd(fd);
+	newcli.set_ip(inet_ntoa((addr.sin_addr)));
+	_clients.push_back(newcli);
+	newcli.set_status(LOGIN);
+	std::cout << fd << " this client is now connected" << std::endl;
+}
+
+void	Server::rmv_client(int fd) {
+	for (size_t i = 0; i < this->_clients.size(); i++) {
+		if (this->_clients[i].get_fd() == fd) {
+			this->_clients.erase(this->_clients.begin() + i);
+			std::cout << _clients[i].get_fd() << " this client is now disconnected" << std::endl;
+			return;
+		}
+	}
 }

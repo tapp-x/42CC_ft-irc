@@ -6,7 +6,7 @@
 /*   By: tappourc <tappourc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/29 10:53:19 by tappourc          #+#    #+#             */
-/*   Updated: 2024/09/18 12:06:04 by tappourc         ###   ########.fr       */
+/*   Updated: 2024/09/26 12:33:51 by tappourc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@
 #include <vector>
 
 // MY HPP FILES
-// #include "Client.hpp"
+#include "Client.hpp"
 #include "Exception.hpp"
 #include "Server.hpp"
 
