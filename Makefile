@@ -6,7 +6,7 @@
 #    By: tappourc <tappourc@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/29 10:45:35 by tappourc          #+#    #+#              #
-#    Updated: 2024/09/26 16:16:55 by tappourc         ###   ########.fr        #
+#    Updated: 2024/10/03 12:37:57 by tappourc         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,6 +17,8 @@ CXXFLAGS = -Wall -Wextra -Werror -g -std=c++98
 
 SRCS = \
 		main.cpp \
+		./srcs/Socket.cpp \
+		./srcs/Tcp.cpp \
 		./srcs/Server.cpp \
 		./srcs/Client.cpp \
 
