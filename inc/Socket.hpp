@@ -6,7 +6,7 @@
 /*   By: tappourc <tappourc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 14:48:25 by tappourc          #+#    #+#             */
-/*   Updated: 2024/10/03 15:22:03 by tappourc         ###   ########.fr       */
+/*   Updated: 2024/10/03 15:53:50 by tappourc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,9 @@ class Socket {
 	// METHODS
 		void						init();
 		void						bindSocket(int port);
+		void						setNonblock();
 		void						listenSocket(int backlog);
-		Socket						acceptConnection();
+		Socket						acceptConnection(int sockServ);
 
 	//EXCEPTION
 		class SocketException : public Except {

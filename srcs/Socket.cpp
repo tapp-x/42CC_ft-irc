@@ -6,7 +6,7 @@
 /*   By: tappourc <tappourc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 14:49:48 by tappourc          #+#    #+#             */
-/*   Updated: 2024/10/03 15:26:16 by tappourc         ###   ########.fr       */
+/*   Updated: 2024/10/03 15:57:55 by tappourc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,16 +80,22 @@ void Socket::listenSocket(int backlog) {
 		throw SocketException("Failed at socket listen");
 }
 
-Socket Socket::acceptConnection() {
+Socket Socket::acceptConnection(int	sockServ) {
+	std::cout << "passed here" << std::endl;
 	struct sockaddr_in clientAddr;
 	socklen_t clientAddrLen = sizeof(clientAddr);
-	int clientFd = accept(this->getFd(), (struct sockaddr*)&clientAddr, &clientAddrLen);
+	int clientFd = accept(sockServ, (struct sockaddr*)&clientAddr, &clientAddrLen);
 	if (clientFd < 0)
 		throw SocketException("Failed to accept connection");
 
 	Socket clientSocket;
 	clientSocket._fd = clientFd;
 	clientSocket._addr = clientAddr;
-	
+	std::cout << "socket nb: " << clientFd <<" added !" <<std::endl;
 	return (clientSocket);
+}
+
+void	Socket::setNonblock() {
+	if (fcntl(_fd, F_SETFL, O_NONBLOCK) == -1)
+		throw SocketException("Failed at socket fcntl");
 }

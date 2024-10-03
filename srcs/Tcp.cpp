@@ -6,7 +6,7 @@
 /*   By: tappourc <tappourc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 17:08:02 by tappourc          #+#    #+#             */
-/*   Updated: 2024/10/03 15:29:11 by tappourc         ###   ########.fr       */
+/*   Updated: 2024/10/03 16:02:42 by tappourc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,13 +36,20 @@ int		Tcp::getSockServ() {
 //METHODS
 void	Tcp::initServ(int port, int backlog) {
 	_sockServ.init();
+	_sockServ.setNonblock();
 	_sockServ.bindSocket(port);
 	_sockServ.listenSocket(backlog);
+
+	//pursue with poll
+	this->_newPoll.fd = _sockServ.getFd();
+	this->_newPoll.events = POLLIN;
+	this->_newPoll.revents = 0;
+	_pollfds.push_back(_newPoll);
 }
 
 Socket	Tcp::acceptNewClient() {
-	 _sockClient.push_back(_sockServ.acceptConnection());
-	 return (_sockServ.acceptConnection());
+	//  _sockClient.push_back(_sockServ.acceptConnection(_sockServ.getFd()));
+	 return (_sockServ.acceptConnection(_sockServ.getFd()));
 }
 
 
@@ -62,7 +69,7 @@ void	Tcp::run() {
 		{
 			if (_pollfds[i].fd == _sockServ.getFd())
 			{
-				this->acceptNewClient();
+				_sockClient.push_back(acceptNewClient());
 				break;
 			}
 			// else
