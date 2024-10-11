@@ -52,12 +52,6 @@ Socket	Tcp::acceptNewClient() {
 	 return (_sockServ.acceptConnection(_sockServ.getFd()));
 }
 
-
-bool	Tcp::_sigTCP = true;
-void	Tcp::stop_sig() {
-	this->_sigTCP = false;
-}
-
 void	Tcp::run() {
 	if (poll(&_pollfds[0], _pollfds.size(), -1) == -1 && !globalSig) // error occurs in poll
 		throw TCPException("poll() error");
