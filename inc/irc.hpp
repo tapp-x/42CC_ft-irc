@@ -6,7 +6,7 @@
 /*   By: tappourc <tappourc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/29 10:53:19 by tappourc          #+#    #+#             */
-/*   Updated: 2024/10/03 14:48:09 by tappourc         ###   ########.fr       */
+/*   Updated: 2024/10/11 18:09:11 by tappourc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,5 +45,7 @@
 
 // MY HPP FILES
 #include "Exception.hpp"
+
+extern bool globalSig;
 
 #endif

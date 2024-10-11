@@ -27,8 +27,6 @@ class Tcp {
 		struct pollfd				_newPoll;
 		std::vector<struct pollfd>	_pollfds;
 		
-		static bool					_sigTCP;
-	
 	public:
 	// BASICS
 		Tcp();
@@ -40,7 +38,6 @@ class Tcp {
 		int							getSockServ();
 
 	//SETTERS
-		void						stop_sig();
 	
 	// METHODS
 		void						initServ(int port, int backlog);

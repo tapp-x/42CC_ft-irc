@@ -6,7 +6,7 @@
 /*   By: tappourc <tappourc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 18:15:45 by tappourc          #+#    #+#             */
-/*   Updated: 2024/10/03 15:24:14 by tappourc         ###   ########.fr       */
+/*   Updated: 2024/10/11 18:11:55 by tappourc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,6 @@ class Server {
 		int					_client_max;
 		std::string			_password;
 		std::string			_hostname;
-	//SIGNAL TO STOP THE SERVER
-		static bool			_sig;
 	//SOCKET PART
 		Tcp					_TcpHandler;
 	// //LIST OF USER

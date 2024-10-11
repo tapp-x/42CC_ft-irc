@@ -6,7 +6,7 @@
 /*   By: tappourc <tappourc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/29 10:49:41 by tappourc          #+#    #+#             */
-/*   Updated: 2024/10/03 15:25:34 by tappourc         ###   ########.fr       */
+/*   Updated: 2024/10/11 18:10:53 by tappourc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 //BASICS
 Server::Server() : _TcpHandler() {
-	this->_sig = false;
 	this->_port = 0;
 	this->_client_max = 0;
 	this->_password = "";
@@ -34,7 +33,6 @@ Server &Server::operator=(const Server &other) {
 		_password = other._password;
 		_hostname = other._hostname;
 		_TcpHandler = other._TcpHandler;
-		_sig = other._sig;
 		_clients = other._clients;
 		// channels = server.channels;
 	}
@@ -77,11 +75,11 @@ std::string	Server::get_hostname() {
 }
 
 // METHODS
-bool Server::_sig = false;
+// bool Server::_sig = false;
 void	Server::sigHandler(int signum) {
 	(void)signum;
 	std::cout << std::endl << "Signal Received!" << std::endl;
-	Server::_sig = true;
+	globalSig = true;
 }
 
 void Server::display_info() {
@@ -109,7 +107,7 @@ void	Server::init(int port, int maxclient, std::string password, std::string hos
 	std::cout << "server initialised" << std::endl;
 
 	this->display_info();
-	while(_sig == false) {
+	while(globalSig == false) {
 		_TcpHandler.run();
 		//function to update the list of clients etc
 	}

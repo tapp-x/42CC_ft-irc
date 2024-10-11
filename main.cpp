@@ -13,6 +13,8 @@
 #include "./inc/irc.hpp"
 #include "inc/Server.hpp"
 
+bool globalSig = false;
+
 int main(int argc, char **argv)
 {
 	if (argc != 3) {

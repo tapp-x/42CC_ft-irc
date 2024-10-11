@@ -59,7 +59,7 @@ void	Tcp::stop_sig() {
 }
 
 void	Tcp::run() {
-	if (poll(&_pollfds[0], _pollfds.size(), -1) == -1 && _sigTCP == false) // error occurs in poll
+	if (poll(&_pollfds[0], _pollfds.size(), -1) == -1 && !globalSig) // error occurs in poll
 		throw TCPException("poll() error");
 	for (size_t i = 0; i < _pollfds.size(); i++)
 	{
