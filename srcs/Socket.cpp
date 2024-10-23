@@ -6,7 +6,7 @@
 /*   By: tappourc <tappourc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 14:49:48 by tappourc          #+#    #+#             */
-/*   Updated: 2024/10/03 15:57:55 by tappourc         ###   ########.fr       */
+/*   Updated: 2024/10/23 12:18:07 by tappourc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@ void Socket::bindSocket(int port) {
 	_addr.sin_family = AF_INET;
 	_addr.sin_addr.s_addr = INADDR_ANY;
 	_addr.sin_port = htons(port);
+	std::cout << "port: " << _addr.sin_port << std::endl;
 
 	if (bind(this->getFd(), (struct sockaddr*)&_addr, sizeof(_addr)) < 0)
 		throw SocketException("Failed at socket bind");

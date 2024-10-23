@@ -6,7 +6,7 @@
 /*   By: tappourc <tappourc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 12:24:42 by tappourc          #+#    #+#             */
-/*   Updated: 2024/10/03 15:54:05 by tappourc         ###   ########.fr       */
+/*   Updated: 2024/10/11 18:12:12 by tappourc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,8 @@ class Tcp {
 	// METHODS
 		void						initServ(int port, int backlog);
 		Socket						acceptNewClient();
+		void						removeClient(int clientFd);
+		void						handleClientMessage(int clientFd);
 		void						run();
 	
 	//EXCEPTION
