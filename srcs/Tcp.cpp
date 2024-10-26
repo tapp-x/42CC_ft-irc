@@ -6,7 +6,7 @@
 /*   By: tappourc <tappourc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 17:08:02 by tappourc          #+#    #+#             */
-/*   Updated: 2024/10/23 12:28:07 by tappourc         ###   ########.fr       */
+/*   Updated: 2024/10/26 12:58:28 by tappourc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,9 @@ int		Tcp::getSockServ() {
 
 //METHODS
 void	Tcp::initServ(int port, int backlog) {
-	_sockServ.init();
+	_sockServ.init(port);
 	_sockServ.setNonblock();
-	_sockServ.bindSocket(port);
+	_sockServ.bindSocket();
 	_sockServ.listenSocket(backlog);
 
 	//pursue with poll
@@ -47,12 +47,21 @@ void	Tcp::initServ(int port, int backlog) {
 	_pollfds.push_back(_newPoll);
 }
 
-Socket	Tcp::acceptNewClient() {
-	 return (_sockServ.acceptConnection(_sockServ.getFd()));
+void	Tcp::acceptNewClient() {
+	Socket *newClient;
+	_sockServ.acceptConnection(newClient, _sockServ.getFd());
+	std::cout << "New client accepted with fd " << newClient->getFd() << std::endl;
+	_sockClient.push_back(newClient);
+	_newPoll.fd = newClient->getFd();
+	_newPoll.events = POLLIN;
+	_newPoll.revents = 0;
+	_pollfds.push_back(_newPoll);
+	std::cout << "Number of clients: " << _sockClient.size() << std::endl;
+	std::cout << "Number of pollfds: " << _pollfds.size() << std::endl;
 }
 
 void Tcp::run() {
-	std::cout << "Server running" << std::endl;
+	std::cout << "Server running " << std::endl;
 	while (!globalSig) {
 		if (poll(&_pollfds[0], _pollfds.size(), -1) == -1 && !globalSig) {
 			throw TCPException("poll() error");
@@ -62,34 +71,22 @@ void Tcp::run() {
 				continue;
 			}
 			if (_pollfds[i].revents & POLLIN) {
-				if (_pollfds[i].fd == _sockServ.getFd()) {
-					std::cout << "Accepting new client" << std::endl;
-					Socket newClient = acceptNewClient();
-					std::cout << "New client accepted with fd " << newClient.getFd() << std::endl;
-					_sockClient.push_back(newClient);
-					_newPoll.fd = newClient.getFd();
-					_newPoll.events = POLLIN;
-					_newPoll.revents = 0;
-					_pollfds.push_back(_newPoll);
-					// _sockClient.push_back(acceptNewClient());
-				} else {
-					std::cout << "Handling message from client with fd " << _pollfds[i].fd << std::endl;
+				if (_pollfds[i].fd == _sockServ.getFd())
+					acceptNewClient();
+				else {
 					handleClientMessage(_pollfds[i].fd);
 				}
 			}
-			if (_pollfds[i].revents & POLLHUP) {
-				std::cout << "Client with fd " << _pollfds[i].fd << " disconnected" << std::endl;
-				removeClient(_pollfds[i].fd);
-			}
 		}
 	}
+	std::cout << "Server stopped"  << " poll size " << _pollfds.size() << std::endl;	
 }
 
 void	Tcp::removeClient(int clientFd) {
 	std::cout << "Removing client with fd " << clientFd << std::endl;
 	for (size_t i = 0; i < _sockClient.size(); i++)
 	{
-		if (_sockClient[i].getFd() == clientFd)
+		if (_sockClient[i]->getFd() == clientFd)
 		{
 			_sockClient.erase(_sockClient.begin() + i);
 			break;
@@ -108,13 +105,10 @@ void	Tcp::handleClientMessage(int clientFd) {
 	char buffer[1024];
 	int bytesRead = recv(clientFd, buffer, sizeof(buffer), 0);
 	if (bytesRead <= 0) {
-		// Error or client disconnected
 		std::cout << "Error or client disconnected with fd " << clientFd << std::endl;
 		removeClient(clientFd);
 	} else {
-		// Process the message
 		std::string message(buffer, bytesRead);
 		std::cout << "Received message from client " << clientFd << ": " << message << std::endl;
-		// Add your message handling logic here
 	}
 }

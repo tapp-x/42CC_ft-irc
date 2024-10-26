@@ -6,7 +6,7 @@
 /*   By: tappourc <tappourc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 12:24:42 by tappourc          #+#    #+#             */
-/*   Updated: 2024/10/11 18:12:12 by tappourc         ###   ########.fr       */
+/*   Updated: 2024/10/26 12:09:50 by tappourc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ class Socket;
 class Tcp {
 	private :
 		Socket						_sockServ;		
-		std::vector<Socket>			_sockClient;
+		std::vector<Socket *>		_sockClient;
 		
 		struct pollfd				_newPoll;
 		std::vector<struct pollfd>	_pollfds;
@@ -41,7 +41,7 @@ class Tcp {
 	
 	// METHODS
 		void						initServ(int port, int backlog);
-		Socket						acceptNewClient();
+		void						acceptNewClient();
 		void						removeClient(int clientFd);
 		void						handleClientMessage(int clientFd);
 		void						run();

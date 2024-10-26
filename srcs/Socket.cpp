@@ -6,7 +6,7 @@
 /*   By: tappourc <tappourc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 14:49:48 by tappourc          #+#    #+#             */
-/*   Updated: 2024/10/23 12:18:07 by tappourc         ###   ########.fr       */
+/*   Updated: 2024/10/26 13:03:56 by tappourc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,6 @@ const struct sockaddr_in& Socket::getAddr() {
 
 // ALL SETTERS
 void Socket::setFd(int fd) {
-	std::cout << this->getFd() << std::endl;
 	this->_fd = fd;
 }
 
@@ -58,20 +57,23 @@ void Socket::setAddr(const struct sockaddr_in& addr) {
 
 
 // METHODS
-void Socket::init() {
-	int servfd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+void Socket::init(int port) {
+	int servfd = socket(AF_INET, SOCK_STREAM, 0);
 	std::cout << servfd << std::endl;
 	this->setFd(servfd);
 	if (_fd < 0)
 		throw SocketException("Failed at socket creation");
+	
+	_addr.sin_family = AF_INET;
+	_addr.sin_addr.s_addr = inet_addr("127.0.0.1");
+	_addr.sin_port = htons(port);
+
+	int opt = 1;
+	if (setsockopt(_fd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)) < 0)
+		throw SocketException("Failed at socket setsockopt");
 }
 
-void Socket::bindSocket(int port) {
-	_addr.sin_family = AF_INET;
-	_addr.sin_addr.s_addr = INADDR_ANY;
-	_addr.sin_port = htons(port);
-	std::cout << "port: " << _addr.sin_port << std::endl;
-
+void Socket::bindSocket() {
 	if (bind(this->getFd(), (struct sockaddr*)&_addr, sizeof(_addr)) < 0)
 		throw SocketException("Failed at socket bind");
 }
@@ -81,19 +83,18 @@ void Socket::listenSocket(int backlog) {
 		throw SocketException("Failed at socket listen");
 }
 
-Socket Socket::acceptConnection(int	sockServ) {
-	std::cout << "passed here" << std::endl;
+void Socket::acceptConnection(Socket *clientSocket, int sockServ) {
 	struct sockaddr_in clientAddr;
 	socklen_t clientAddrLen = sizeof(clientAddr);
 	int clientFd = accept(sockServ, (struct sockaddr*)&clientAddr, &clientAddrLen);
 	if (clientFd < 0)
 		throw SocketException("Failed to accept connection");
 
-	Socket clientSocket;
-	clientSocket._fd = clientFd;
-	clientSocket._addr = clientAddr;
-	std::cout << "socket nb: " << clientFd <<" added !" <<std::endl;
-	return (clientSocket);
+	if (fcntl(clientFd, F_SETFL, O_NONBLOCK) < 0)
+		throw SocketException("Failed at socket fcntl");
+
+	clientSocket->setFd(clientFd);
+	clientSocket->setAddr(clientAddr);
 }
 
 void	Socket::setNonblock() {

@@ -6,7 +6,7 @@
 /*   By: tappourc <tappourc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 14:48:25 by tappourc          #+#    #+#             */
-/*   Updated: 2024/10/03 15:53:50 by tappourc         ###   ########.fr       */
+/*   Updated: 2024/10/26 12:11:17 by tappourc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,11 +36,11 @@ class Socket {
 		void						setAddr(const struct sockaddr_in& addr);
 	
 	// METHODS
-		void						init();
-		void						bindSocket(int port);
+		void						init(int port);
+		void						bindSocket();
 		void						setNonblock();
 		void						listenSocket(int backlog);
-		Socket						acceptConnection(int sockServ);
+		void						acceptConnection(Socket *clientSocket, int fd);
 
 	//EXCEPTION
 		class SocketException : public Except {
