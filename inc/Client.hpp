@@ -6,7 +6,7 @@
 /*   By: tappourc <tappourc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/29 10:54:23 by tappourc          #+#    #+#             */
-/*   Updated: 2024/10/03 15:22:48 by tappourc         ###   ########.fr       */
+/*   Updated: 2024/10/26 20:03:37 by tappourc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,23 +37,25 @@ class Client {
 	//BASICS
 		Client();
 		~Client();
-		// Client(int fd, std::string username, std::string nickname);
-		// Client(Client const &src);
-		// Client &operator=(Client const &src);
+		Client(Client const &src);
+		Client &operator=(Client const &src);
 	
 	//GETTERS
 		std::string		get_username();
 		std::string		get_nickname();
+		std::string		get_ip();
 		int				get_fd();
 		ClientStatus	get_status();
 		bool			is_operator();
 	
 	//SETTERS
+		void			set_fd(int fd);
 		void			set_username(std::string username);
 		void			set_nickname(std::string nickname);
 		void			set_ip(std::string ipadd);
-		void			set_fd(int fd);
 		void			set_status(ClientStatus new_status);
+		void			set_operator(bool op);
+		
 	// METHODS
 };
 

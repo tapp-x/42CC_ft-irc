@@ -6,7 +6,7 @@
 /*   By: tappourc <tappourc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 17:08:02 by tappourc          #+#    #+#             */
-/*   Updated: 2024/10/26 12:58:28 by tappourc         ###   ########.fr       */
+/*   Updated: 2024/10/26 20:13:15 by tappourc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,38 @@ Tcp &Tcp::operator=(const Tcp &other){
 	}
 	return (*this);
 }
+
 // ALL GETTERS
 int		Tcp::getSockServ() {
 	return (_sockServ.getFd());
 }
 
-// ALL SETTERS
+size_t Tcp::getSockClientSize() const {
+	return _sockClient.size();
+}
+
+int Tcp::getLastFd() const {
+	if (!_sockClient.empty()) {
+		return _sockClient.back()->getFd();
+	}
+	return -1;
+}
+
+std::string Tcp::getLastIp() const {
+	if (!_sockClient.empty()) {
+		return _sockClient.back()->getIp();
+	}
+	return "";
+}
+
+bool Tcp::clientExists(int clientFd) const {
+	for (size_t i = 0; i < _sockClient.size(); ++i) {
+		if (_sockClient[i]->getFd() == clientFd) {
+			return true;
+		}
+	}
+	return false;
+}
 
 //METHODS
 void	Tcp::initServ(int port, int backlog) {
@@ -40,28 +66,13 @@ void	Tcp::initServ(int port, int backlog) {
 	_sockServ.bindSocket();
 	_sockServ.listenSocket(backlog);
 
-	//pursue with poll
 	this->_newPoll.fd = _sockServ.getFd();
 	this->_newPoll.events = POLLIN;
 	this->_newPoll.revents = 0;
 	_pollfds.push_back(_newPoll);
 }
 
-void	Tcp::acceptNewClient() {
-	Socket *newClient;
-	_sockServ.acceptConnection(newClient, _sockServ.getFd());
-	std::cout << "New client accepted with fd " << newClient->getFd() << std::endl;
-	_sockClient.push_back(newClient);
-	_newPoll.fd = newClient->getFd();
-	_newPoll.events = POLLIN;
-	_newPoll.revents = 0;
-	_pollfds.push_back(_newPoll);
-	std::cout << "Number of clients: " << _sockClient.size() << std::endl;
-	std::cout << "Number of pollfds: " << _pollfds.size() << std::endl;
-}
-
 void Tcp::run() {
-	std::cout << "Server running " << std::endl;
 	while (!globalSig) {
 		if (poll(&_pollfds[0], _pollfds.size(), -1) == -1 && !globalSig) {
 			throw TCPException("poll() error");
@@ -71,23 +82,41 @@ void Tcp::run() {
 				continue;
 			}
 			if (_pollfds[i].revents & POLLIN) {
-				if (_pollfds[i].fd == _sockServ.getFd())
+				if (_pollfds[i].fd == _sockServ.getFd()){
 					acceptNewClient();
+					return ;
+				}
+					
 				else {
 					handleClientMessage(_pollfds[i].fd);
+					return ;
 				}
 			}
 		}
 	}
-	std::cout << "Server stopped"  << " poll size " << _pollfds.size() << std::endl;	
+	// std::cout << "Server stopped"  << " poll size " << _pollfds.size() << std::endl;	
+}
+
+void	Tcp::acceptNewClient() {
+	Socket *newClient = new Socket();
+	_sockServ.acceptConnection(newClient, _sockServ.getFd());
+	_sockClient.push_back(newClient);
+	_newPoll.fd = newClient->getFd();
+	_newPoll.events = POLLIN;
+	_newPoll.revents = 0;
+	_pollfds.push_back(_newPoll);
+	// std::cout << "New client accepted with fd " << newClient->getFd() << std::endl;
+	// std::cout << "Number of clients: " << _sockClient.size() << std::endl;
+	// std::cout << "Number of pollfds: " << _pollfds.size() << std::endl;
 }
 
 void	Tcp::removeClient(int clientFd) {
-	std::cout << "Removing client with fd " << clientFd << std::endl;
+	// std::cout << "Removing client with fd " << clientFd << std::endl;
 	for (size_t i = 0; i < _sockClient.size(); i++)
 	{
 		if (_sockClient[i]->getFd() == clientFd)
 		{
+			delete _sockClient[i];
 			_sockClient.erase(_sockClient.begin() + i);
 			break;
 		}
@@ -98,14 +127,14 @@ void	Tcp::removeClient(int clientFd) {
 			break;
 		}
 	}
-	std::cout << "Client " << clientFd << " removed" << std::endl;
+	// std::cout << "Client " << clientFd << " removed" << std::endl;
 }
 
 void	Tcp::handleClientMessage(int clientFd) {
 	char buffer[1024];
 	int bytesRead = recv(clientFd, buffer, sizeof(buffer), 0);
 	if (bytesRead <= 0) {
-		std::cout << "Error or client disconnected with fd " << clientFd << std::endl;
+		// std::cout << "Error or client disconnected with fd " << clientFd << std::endl;
 		removeClient(clientFd);
 	} else {
 		std::string message(buffer, bytesRead);

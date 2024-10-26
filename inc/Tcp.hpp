@@ -6,7 +6,7 @@
 /*   By: tappourc <tappourc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 12:24:42 by tappourc          #+#    #+#             */
-/*   Updated: 2024/10/26 12:09:50 by tappourc         ###   ########.fr       */
+/*   Updated: 2024/10/26 20:11:44 by tappourc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,11 @@ class Tcp {
 	
 	//GETTERS
 		int							getSockServ();
+		size_t						getSockClientSize() const;
+		int							getLastFd() const;
+		std::string					getLastIp() const;
+		bool						clientExists(int clientFd) const;
 
-	//SETTERS
-	
 	// METHODS
 		void						initServ(int port, int backlog);
 		void						acceptNewClient();

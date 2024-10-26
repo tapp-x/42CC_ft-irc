@@ -6,15 +6,14 @@
 /*   By: tappourc <tappourc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 14:49:48 by tappourc          #+#    #+#             */
-/*   Updated: 2024/10/26 13:03:56 by tappourc         ###   ########.fr       */
+/*   Updated: 2024/10/26 19:55:12 by tappourc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/Socket.hpp"
 
 //BASICS
-Socket::Socket() : _fd(-1) {
-	std::cout << "socket create" << std::endl;
+Socket::Socket() : _fd(-1), _ip("") {
 	memset(&_addr, 0, sizeof(_addr));
 }
 
@@ -26,6 +25,7 @@ Socket::~Socket() {
 
 Socket::Socket(const Socket &other) {
 	_fd = other._fd;
+	_ip = other._ip;
 	_addr = other._addr;
 }
 
@@ -33,17 +33,22 @@ Socket &Socket::operator=(const Socket &other) {
 	if (this != &other) {
 		_fd = other._fd;
 		_addr = other._addr;
+		_ip = other._ip;
 	}
 	return (*this);
 }
 
 // ALL GETTERS
-int Socket::getFd() {
+int Socket::getFd() const {
 	return (_fd);
 }
 
-const struct sockaddr_in& Socket::getAddr() {
+const struct sockaddr_in& Socket::getAddr() const {
 	return (_addr);
+}
+
+std::string Socket::getIp() const{
+	return (_ip);
 }
 
 // ALL SETTERS
@@ -53,6 +58,10 @@ void Socket::setFd(int fd) {
 
 void Socket::setAddr(const struct sockaddr_in& addr) {
 	_addr = addr;
+}
+
+void Socket::setIp(const std::string &newIp) {
+	_ip = newIp;
 }
 
 
@@ -67,6 +76,8 @@ void Socket::init(int port) {
 	_addr.sin_family = AF_INET;
 	_addr.sin_addr.s_addr = inet_addr("127.0.0.1");
 	_addr.sin_port = htons(port);
+
+	_ip = "127.0.0.1";
 
 	int opt = 1;
 	if (setsockopt(_fd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)) < 0)
@@ -95,6 +106,9 @@ void Socket::acceptConnection(Socket *clientSocket, int sockServ) {
 
 	clientSocket->setFd(clientFd);
 	clientSocket->setAddr(clientAddr);
+	std::string newIp = inet_ntoa(clientAddr.sin_addr);
+	clientSocket->setIp(newIp);
+	// std::cout << "Accepted connection from " << clientSocket->getFd() << std::endl;
 }
 
 void	Socket::setNonblock() {

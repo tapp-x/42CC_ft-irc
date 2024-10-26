@@ -6,7 +6,7 @@
 /*   By: tappourc <tappourc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/29 10:49:41 by tappourc          #+#    #+#             */
-/*   Updated: 2024/10/11 18:10:53 by tappourc         ###   ########.fr       */
+/*   Updated: 2024/10/26 20:10:15 by tappourc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,10 @@ int	Server::get_port() {
 	return (this->_port);
 }
 
+int	Server::get_clientmax() {
+	return (this->_client_max);
+}
+
 int	Server::get_sockserv() {
 	return (_TcpHandler.getSockServ());
 }
@@ -104,11 +108,54 @@ void	Server::init(int port, int maxclient, std::string password, std::string hos
 	this->_hostname = hostname;
 
 	_TcpHandler.initServ(_port, _client_max);
-	std::cout << "server initialised" << std::endl;
 
 	this->display_info();
+	std::cout << "Server is running..." << std::endl;
 	while(globalSig == false) {
 		_TcpHandler.run();
-		//function to update the list of clients etc
+		checkAndAddClient();
+		checkAndRemoveClient();
+	}
+	shutdown_serv();
+}
+
+void Server::shutdown_serv() {
+	std::cout << "Shutting down server..." << std::endl;
+	for (size_t i = 0; i < _clients.size(); i++) {
+		close(_clients[i].get_fd());
+		std::cout << "Client " << _clients[i].get_fd() << " disconnected." << std::endl;
+		delete &_clients[i];
+		_clients.erase(_clients.begin() + i);
+	}
+	_clients.clear();
+
+	// Fermer les channels
+	
+	close(_TcpHandler.getSockServ());
+	std::cout << "Server closed & all clients disconected" << std::endl;
+}
+
+void Server::checkAndAddClient() {
+	if (_TcpHandler.getSockClientSize() > _clients.size()) {
+		int clientFd = _TcpHandler.getLastFd();
+		std::string clientIp = _TcpHandler.getLastIp();
+		Client newClient;
+		newClient.set_fd(clientFd);
+		newClient.set_ip(clientIp);
+		newClient.set_status(WAITING);
+		_clients.push_back(newClient);
+		std::cout << "Client added with fd " << clientFd << " and IP " << clientIp << std::endl;
+	}
+}
+
+void Server::checkAndRemoveClient() {
+	for (std::vector<Client>::iterator it = _clients.begin(); it != _clients.end(); ) {
+		int clientFd = it->get_fd();
+		if (!_TcpHandler.clientExists(clientFd)) {
+			std::cout << "Removing client with fd " << clientFd << " from server" << std::endl;
+			it = _clients.erase(it);
+		} else {
+			++it;
+		}
 	}
 }
