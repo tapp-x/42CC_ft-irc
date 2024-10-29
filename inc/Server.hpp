@@ -69,6 +69,17 @@ class Server {
 		void				checkAndAddClient();
 		void				checkAndRemoveClient();
 		void				createChannel(const std::string &channelName, Client *client);
+		void				exec_cmd(const std::string &cmd, int fd);
+		void				join_cmd(Client *client, std::vector<std::string> &cmd_split);
+		void				user_cmd(Client *client, const std::string &username);
+		void				nick_cmd(Client *client, const std::string &nickname);
+		void				privmsg_cmd(Client *client, const std::string &cmd);
+		void				msgPrivate(Client *client, const std::string &target, const std::string &message);
+		void				msgOnChannel(Client *client, const std::string &channelName, const std::string &message);
+		
+		
+		std::vector<std::string>	splitter(const std::string &str, char space);
+		std::vector<std::string>	splitCommands(const std::string &str);
 
 	// DEBUG
 		void				display_info();

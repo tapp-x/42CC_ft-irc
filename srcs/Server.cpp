@@ -229,4 +229,42 @@ void Server::createChannel(const std::string &channelName, Client *client) {
 	client->sendMessage(MSG_JOIN(client->get_nickname(), clean_channelName));
 }
 
+
+// EXECUTE CMD
+
+std::vector<std::string> Server::splitter(const std::string &str, char space) {
+	std::vector<std::string> tokens;
+	std::stringstream ss(str);
+	std::string token;
+	while (std::getline(ss, token, space)) {
+		tokens.push_back(token);
+	}
+	return (tokens);
+}
+
+std::vector<std::string> Server::splitCommands(const std::string &str) {
+	return splitter(str, '\n');
+}
+
+void Server::exec_cmd(const std::string &cmd, int fd) {
+	std::cout << "executing command: " << cmd << std::endl;
+	// displayClientInfo(this->get_client(fd));
+	this->get_client(fd)->set_cmdBuff(cmd);
+	std::vector<std::string> commands = splitCommands(cmd);
+	for (size_t i = 0; i < commands.size(); ++i) {
+		std::vector<std::string> cmd_split = splitter(commands[i], ' ');
+		if (cmd_split[0] == "join" || cmd_split[0] == "JOIN") {
+			join_cmd(this->get_client(fd), cmd_split);
+		}
+		if (cmd_split[0] == "nick" || cmd_split[0] == "NICK") {
+			nick_cmd(this->get_client(fd), cmd_split[1]);
+		}
+		if (cmd_split[0] == "user" || cmd_split[0] == "USER") {
+			user_cmd(this->get_client(fd), cmd_split[1]);
+		}
+		if (cmd_split[0] == "privmsg" || cmd_split[0] == "PRIVMSG") {
+			privmsg_cmd(this->get_client(fd), cmd);
+		}
+	}
+	this->get_client(fd)->set_cmdBuff("");
 }

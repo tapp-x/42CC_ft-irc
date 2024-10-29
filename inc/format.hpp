@@ -6,7 +6,7 @@
 /*   By: tappourc <tappourc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 17:44:10 by tappourc          #+#    #+#             */
-/*   Updated: 2024/10/28 19:36:01 by tappourc         ###   ########.fr       */
+/*   Updated: 2024/10/29 15:51:29 by tappourc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,5 +28,15 @@
 #define MSG_PRIVMSG(nickname, target, message) ":" + nickname + " PRIVMSG " + target + " :" + message + EOL
 #define MSG_QUIT(nickname, reason) ":" + nickname + " QUIT :" + reason + EOL
 #define MSG_TOPIC(nickname, channel, topic) ":" + nickname + " TOPIC " + channel + " :" + topic + EOL
+
+#define ERR_NOSUCHNICK(nickname) "401 " + nickname + " :No such nick/channel" + EOL
+#define ERR_NOSUCHCHANNEL(channel) "403 " + channel + " :No such channel" + EOL
+#define ERR_CANNOTSENDTOCHAN(channel) "404 " + channel + " :Cannot send to channel" + EOL
+#define ERR_NICKNAMEINUSE(nickname) "433 " + nickname + " :Nickname is already in use" + EOL
+#define ERR_NEEDMOREPARAMS(command) "461 " + command + " :Not enough parameters" + EOL
+#define ERR_ALREADYREGISTRED "462 :You may not reregister" + EOL
+#define ERR_PASSWDMISMATCH "464 :Password incorrect" + EOL
+#define ERR_ALREADYINVITED "467 :Already invited" + EOL
+#define ERR_CHANPRIVSNEEDED(channel) "482 " + channel + " :You're not channel operator" + EOL
 
 #endif
