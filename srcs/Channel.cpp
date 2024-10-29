@@ -6,11 +6,11 @@
 /*   By: tappourc <tappourc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 23:54:34 by tappourc          #+#    #+#             */
-/*   Updated: 2024/10/27 11:43:52 by tappourc         ###   ########.fr       */
+/*   Updated: 2024/10/29 19:02:12 by tappourc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Channel.hpp"
+#include "../inc/Channel.hpp"
 #include <algorithm>
 #include <iostream>
 
@@ -37,48 +37,56 @@ Channel &Channel::operator=(const Channel &other) {
 		_admins = other._admins;
 		_invited = other._invited;
 	}
-	return *this;
+	return (*this);
 }
 
 // GETTERS
 std::string Channel::getName() const {
-	return _name;
+	return (_name);
 }
 
 bool Channel::isInviteOnly() const {
-	return _inviteOnly;
+	return (_inviteOnly);
 }
 
 bool Channel::isTopicRestricted() const {
-	return _topicRestricted;
+	return (_topicRestricted);
 }
 
 std::string Channel::getTopic() const {
-	return _topic;
+	return (_topic);
 }
 
 std::string Channel::getKey() const {
-	return _key;
+	return (_key);
 }
 
 bool Channel::isLimited() const {
-	return _limited;
+	return (_limited);
 }
 
 size_t Channel::getLimit() const {
-	return _limit;
+	return (_limit);
 }
 
 std::vector<Client *> Channel::getClients() const {
-	return _clients;
+	return (_clients);
 }
 
 std::vector<Client *> Channel::getAdmins() const {
-	return _admins;
+	return (_admins);
 }
 
 std::vector<std::string> Channel::getInvited() const {
-	return _invited;
+	return (_invited);
+}
+
+bool Channel::isClient(Client *client) const {
+	for (size_t i = 0; i < _clients.size(); i++) {
+		if (_clients[i] == client)
+			return (true);
+	}
+	return (false);
 }
 
 // SETTERS
@@ -147,5 +155,14 @@ void Channel::removeInvited(const std::string &nickname) {
 	if (it != _invited.end()) {
 		_invited.erase(it);
 		std::cout << "Client " << nickname << " removed from invited list of channel " << _name << std::endl;
+	}
+}
+
+void	Channel::sendToAll(Client *client, const std::string &message) {
+	// std::cout << "msg : " << message << std::endl;
+	for (size_t i = 0; i < _clients.size(); i++) {
+		if (_clients[i] != client) {
+			_clients[i]->sendMessage(MSG_PRIVMSG(client->get_nickname(), _name, message));
+		}
 	}
 }

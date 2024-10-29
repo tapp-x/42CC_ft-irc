@@ -6,7 +6,7 @@
 /*   By: tappourc <tappourc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 23:54:44 by tappourc          #+#    #+#             */
-/*   Updated: 2024/10/27 11:44:01 by tappourc         ###   ########.fr       */
+/*   Updated: 2024/10/29 16:06:22 by tappourc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,10 @@ private:
 		std::string					_key;
 
 	// PARAMETERS
-		size_t						_limit;
 		bool						_inviteOnly;
 		bool						_topicRestricted;
 		bool						_limited;
+		size_t						_limit;
 
 public:
 	// BASICS
@@ -53,6 +53,7 @@ public:
 		bool						isTopicRestricted() const;
 		bool						isLimited() const;
 		bool						isInviteOnly() const;
+		bool						isClient(Client *client) const;
 
 	// SETTERS
 		void						setInviteOnly(bool inviteOnly);
@@ -73,6 +74,9 @@ public:
 	// INVITE METHODS
 		void						inviteClient(const std::string &nickname);
 		void						removeInvited(const std::string &nickname);
+
+	// SEND METHODS
+		void						sendToAll(Client *client, const std::string &message);
 };
 
 #endif
