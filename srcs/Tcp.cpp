@@ -6,7 +6,7 @@
 /*   By: tappourc <tappourc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 17:08:02 by tappourc          #+#    #+#             */
-/*   Updated: 2024/10/26 20:13:15 by tappourc         ###   ########.fr       */
+/*   Updated: 2024/10/29 16:14:19 by tappourc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 
 // BASICS
-Tcp::Tcp() : _sockServ() {}
+Tcp::Tcp(Server *server) : _sockServ(), _server(server) {}
 Tcp::~Tcp() {}
 Tcp::Tcp(const Tcp &other) : _sockServ(other._sockServ), _sockClient(other._sockClient){}
 
@@ -23,6 +23,7 @@ Tcp &Tcp::operator=(const Tcp &other){
 		_sockServ = other._sockServ;
 		_sockClient = other._sockClient;
 		_pollfds = other._pollfds;
+		_server = other._server;
 	}
 	return (*this);
 }
@@ -138,6 +139,7 @@ void	Tcp::handleClientMessage(int clientFd) {
 		removeClient(clientFd);
 	} else {
 		std::string message(buffer, bytesRead);
-		std::cout << "Received message from client " << clientFd << ": " << message << std::endl;
+		// std::cout << "Received message from client " << clientFd << ": " << message << std::endl;
+		this->_server->exec_cmd(message, clientFd);
 	}
 }

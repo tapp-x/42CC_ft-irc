@@ -6,7 +6,7 @@
 /*   By: tappourc <tappourc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/29 10:54:23 by tappourc          #+#    #+#             */
-/*   Updated: 2024/10/26 20:03:37 by tappourc         ###   ########.fr       */
+/*   Updated: 2024/10/28 14:22:25 by tappourc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ class Client {
 		std::string		get_ip();
 		int				get_fd();
 		ClientStatus	get_status();
+		std::string		get_cmdBuff();
 		bool			is_operator();
 	
 	//SETTERS
@@ -55,8 +56,10 @@ class Client {
 		void			set_ip(std::string ipadd);
 		void			set_status(ClientStatus new_status);
 		void			set_operator(bool op);
+		void			set_cmdBuff(std::string cmd);
 		
 	// METHODS
+		bool			sendMessage(const std::string &message);
 };
 
 #endif

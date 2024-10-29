@@ -6,7 +6,7 @@
 /*   By: tappourc <tappourc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 18:15:45 by tappourc          #+#    #+#             */
-/*   Updated: 2024/10/26 20:10:07 by tappourc         ###   ########.fr       */
+/*   Updated: 2024/10/29 18:09:33 by tappourc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,11 @@
 #include "irc.hpp"
 #include "Tcp.hpp"
 #include "Client.hpp"
+#include "Channel.hpp"
 
 class Client;
+class Channel;
+class Tcp;
 
 class Server {
 
@@ -29,13 +32,13 @@ class Server {
 		std::string			_hostname;
 
 	// SOCKET PART
-		Tcp					_TcpHandler;
+		Tcp					*_TcpHandler;
 
 	// LIST OF USER
-		std::vector<Client>	_clients;
+		std::vector<Client *>	_clients;
 
 	// LIST OF CHANNELS
-		// std::vector<Channel>	_channels;
+		std::vector<Channel *>	_channels;
 	public:
 	// BASICS
 		Server();
@@ -56,13 +59,21 @@ class Server {
 		int					get_sockserv();
 		std::string			get_password();
 		std::string			get_hostname();
+		Client				*get_client(int fd);
+		Client				*get_client_by_nick(const std::string &nickname);
+		Channel				*get_channel(const std::string &channelName);
 
 	// METHODS
 		static void			sigHandler(int signum);
-		void				display_info();
 		void				shutdown_serv();
 		void				checkAndAddClient();
 		void				checkAndRemoveClient();
+		void				createChannel(const std::string &channelName, Client *client);
+
+	// DEBUG
+		void				display_info();
+		void				displayClientInfo(Client *client);
+		
 		
 		class ServerException : public Except {
 			public:

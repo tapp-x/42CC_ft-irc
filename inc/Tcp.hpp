@@ -6,17 +6,19 @@
 /*   By: tappourc <tappourc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 12:24:42 by tappourc          #+#    #+#             */
-/*   Updated: 2024/10/26 20:11:44 by tappourc         ###   ########.fr       */
+/*   Updated: 2024/10/28 16:11:59 by tappourc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef TCP_HPP
 #define TCP_HPP
 
+#include "irc.hpp"
+#include "Server.hpp"
 #include "Socket.hpp"
 #include "Client.hpp"
-#include "irc.hpp"
 
+class Server;
 class Socket;
 
 class Tcp {
@@ -26,10 +28,12 @@ class Tcp {
 		
 		struct pollfd				_newPoll;
 		std::vector<struct pollfd>	_pollfds;
+
+		Server						*_server;
 		
 	public:
 	// BASICS
-		Tcp();
+		Tcp(Server *server);
 		~Tcp();
 		Tcp(const Tcp &other);
 		Tcp &operator=(const Tcp &other);
@@ -47,6 +51,7 @@ class Tcp {
 		void						removeClient(int clientFd);
 		void						handleClientMessage(int clientFd);
 		void						run();
+
 	
 	//EXCEPTION
 	class TCPException : public Except {

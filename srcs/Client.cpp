@@ -6,7 +6,7 @@
 /*   By: tappourc <tappourc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/29 10:54:46 by tappourc          #+#    #+#             */
-/*   Updated: 2024/10/26 20:00:54 by tappourc         ###   ########.fr       */
+/*   Updated: 2024/10/29 17:32:41 by tappourc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,10 @@ std::string	Client::get_ip() {
 	return (this->_ip);
 }
 
+std::string	Client::get_cmdBuff() {
+	return (this->_cmdBuff);
+}
+
 // SETTERS
 void	Client::set_username(std::string username) {
 	this->_username = username;
@@ -86,4 +90,20 @@ void	Client::set_status(ClientStatus new_status) {
 
 void	Client::set_operator(bool op) {
 	this->_operator = op;
+}
+
+void	Client::set_cmdBuff(std::string cmd) {
+	this->_cmdBuff = cmd;
+}
+
+// METHODS
+
+bool Client::sendMessage(const std::string &message) {
+	// std::cout << "Sending message to client " << this->_fd << ": " << message << std::endl;
+	ssize_t bytesSent = send(_fd, message.c_str(), message.size(), 0);
+	if (bytesSent == -1) {
+		std::cerr << "Error sending message: " << std::strerror(errno) << std::endl;
+		return false;
+	}
+	return true;
 }
