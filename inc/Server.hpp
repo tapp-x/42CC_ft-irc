@@ -6,7 +6,7 @@
 /*   By: tappourc <tappourc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 18:15:45 by tappourc          #+#    #+#             */
-/*   Updated: 2024/10/29 18:09:33 by tappourc         ###   ########.fr       */
+/*   Updated: 2024/10/30 17:10:29 by tappourc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,17 +69,26 @@ class Server {
 		void				checkAndAddClient();
 		void				checkAndRemoveClient();
 		void				createChannel(const std::string &channelName, Client *client);
-		void				exec_cmd(const std::string &cmd, int fd);
+
+	// COMMANDS
 		void				join_cmd(Client *client, std::vector<std::string> &cmd_split);
 		void				user_cmd(Client *client, const std::string &username);
 		void				nick_cmd(Client *client, const std::string &nickname);
 		void				privmsg_cmd(Client *client, const std::string &cmd);
-		void				msgPrivate(Client *client, const std::string &target, const std::string &message);
-		void				msgOnChannel(Client *client, const std::string &channelName, const std::string &message);
-		
-		
+		void				quit_cmd(Client *client, const std::string &cmd);
+		void				invite_cmd(Client *client, std::vector<std::string> cmd_split);
+		void				part_cmd(Client *client, const std::string &cmd);
+		void				kick_cmd(Client *client, const std::string &cmd);
+
+	// UTILS FOR EXEC	
 		std::vector<std::string>	splitter(const std::string &str, char space);
 		std::vector<std::string>	splitCommands(const std::string &str);
+		std::vector<std::string>	splitter_kick(const std::string &str, char space);
+		std::string					find_reasonQuit(const std::string &cmd);
+		std::string					find_reasonPart(const std::string &cmd);
+		void						exec_cmd(const std::string &cmd, int fd);
+		void						msgOnChannel(Client *client, const std::string &channelName, const std::string &message);
+		void						msgPrivate(Client *client, const std::string &target, const std::string &message);
 
 	// DEBUG
 		void				display_info();

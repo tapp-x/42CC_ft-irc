@@ -6,7 +6,7 @@
 #    By: tappourc <tappourc@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/29 10:45:35 by tappourc          #+#    #+#              #
-#    Updated: 2024/10/29 18:10:33 by tappourc         ###   ########.fr        #
+#    Updated: 2024/10/30 16:59:32 by tappourc         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,6 +26,10 @@ SRCS = \
 		./srcs/CMD/privmsg.cpp \
 		./srcs/CMD/nick.cpp \
 		./srcs/CMD/user.cpp \
+		./srcs/CMD/quit.cpp \
+		./srcs/CMD/invite.cpp \
+		./srcs/CMD/part.cpp \
+		./srcs/CMD/kick.cpp \
 
 OBJS = $(SRCS:.cpp=.o)
 

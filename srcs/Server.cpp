@@ -6,7 +6,7 @@
 /*   By: tappourc <tappourc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/29 10:49:41 by tappourc          #+#    #+#             */
-/*   Updated: 2024/10/29 18:43:45 by tappourc         ###   ########.fr       */
+/*   Updated: 2024/10/30 17:08:03 by tappourc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -231,7 +231,6 @@ void Server::createChannel(const std::string &channelName, Client *client) {
 
 
 // EXECUTE CMD
-
 std::vector<std::string> Server::splitter(const std::string &str, char space) {
 	std::vector<std::string> tokens;
 	std::stringstream ss(str);
@@ -265,6 +264,21 @@ void Server::exec_cmd(const std::string &cmd, int fd) {
 		if (cmd_split[0] == "privmsg" || cmd_split[0] == "PRIVMSG") {
 			privmsg_cmd(this->get_client(fd), cmd);
 		}
+		if (cmd_split[0] == "quit" || cmd_split[0] == "QUIT") {
+			quit_cmd(this->get_client(fd), cmd);
+		}
+		if (cmd_split[0] == "invite" || cmd_split[0] == "INVITE") {
+			invite_cmd(this->get_client(fd), cmd_split);
+		}
+		if (cmd_split[0] == "part" || cmd_split[0] == "PART") {
+			part_cmd(this->get_client(fd), cmd);
+		}
+		if (cmd_split[0] == "kick" || cmd_split[0] == "KICK") {
+			kick_cmd(this->get_client(fd), cmd);
+		}
+		// if (cmd_split[0] == "topic" || cmd_split[0] == "TOPIC") {
+		// 	topic_cmd(this->get_client(fd), cmd_split);
+		// }
 	}
 	this->get_client(fd)->set_cmdBuff("");
 }
