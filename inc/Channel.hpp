@@ -6,7 +6,7 @@
 /*   By: tappourc <tappourc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 23:54:44 by tappourc          #+#    #+#             */
-/*   Updated: 2024/10/29 16:06:22 by tappourc         ###   ########.fr       */
+/*   Updated: 2024/10/30 17:29:02 by tappourc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,10 +50,12 @@ public:
 		std::vector<Client *>		getClients() const;
 		std::vector<Client *>		getAdmins() const;
 		std::vector<std::string>	getInvited() const;
+		size_t						getNbClients() const;
 		bool						isTopicRestricted() const;
 		bool						isLimited() const;
 		bool						isInviteOnly() const;
 		bool						isClient(Client *client) const;
+		bool						isAdmin(Client *client) const;
 
 	// SETTERS
 		void						setInviteOnly(bool inviteOnly);
@@ -76,7 +78,8 @@ public:
 		void						removeInvited(const std::string &nickname);
 
 	// SEND METHODS
-		void						sendToAll(Client *client, const std::string &message);
+		void						sendMsgToAll(Client *client, const std::string &message);
+		void						sendRespToAll(Client *client, const std::string &message);
 };
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: tappourc <tappourc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 15:28:41 by tappourc          #+#    #+#             */
-/*   Updated: 2024/10/29 19:00:58 by tappourc         ###   ########.fr       */
+/*   Updated: 2024/10/30 16:31:15 by tappourc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	Server::msgOnChannel(Client *client, const std::string &channelName, const 
 		client->sendMessage(ERR_CANNOTSENDTOCHAN(channelName));
 		return;
 	}
-	channel->sendToAll(client, message);
+	channel->sendMsgToAll(client, message);
 }
 
 void	Server::msgPrivate(Client *client, const std::string &target, const std::string &message) {
