@@ -29,6 +29,7 @@
 #define MSG_QUIT(nickname, username, reason) ":" + nickname + "!~" + username +"@localhost QUIT " + reason + EOL
 #define MSG_TOPIC(nickname, channel, topic) ":" + nickname + " TOPIC " + channel + " :" + topic + EOL
 #define MSG_TOPICTIME(nickname, channel, time) ": 333 " + nickname + " " + channel + " " + nickname + " " + time + EOL
+#define MSG_CHANMODE(nickname, channel, mode, args) ":" + nickname + " MODE " + channel + " " + mode + " " + args + EOL
 
 #define RPL_INVITING(sender, receiver, channel) "341 " + sender + " " + receiver + " " + channel + EOL
 #define RPL_INVITED(receiver, channel) ":" + receiver + "!" + receiver + " INVITE " + receiver + " " + channel + EOL

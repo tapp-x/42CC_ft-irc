@@ -81,6 +81,7 @@ class Server {
 		void				kick_cmd(Client *client, const std::string &cmd);
 		void				pass_cmd(Client *client, const std::vector<std::string> cmd_split);
 		void				topic_cmd(Client *client, const std::string &cmd);
+		void				mode_cmd(Client *client, const std::string &cmd);
 
 	// UTILS FOR EXEC	
 		std::vector<std::string>	splitter(const std::string &str, char space);
@@ -95,6 +96,11 @@ class Server {
 		void						checkPassword(Client *client, std::string &password);
 		void						change_topic_cmd(Client *client, const std::string &cmd, const std::vector<std::string> &cmd_split, Channel *channel);
 		void						show_topic(Client *client, std::string &channel, Channel *channelObj);
+		void						setInviteOnlyMode(Client *client, const std::string &channelName, char mode);
+		void						setLimitMode(Client *client, const std::string &channelName, char mode, std::string limit_str);
+		void						setTopicProtectionMode(Client *client, const std::string &channelName, char mode);
+		void						setOperatorMode(Client *client_sender, const std::string &channelName, char mode, const std::string &nickname);
+		void						setKeyMode(Client *client, const std::string &channelName, char mode, const std::string &key);
 
 	// DEBUG
 		void				display_info();
