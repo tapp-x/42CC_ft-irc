@@ -25,7 +25,7 @@ void	Server::join_cmd(Client *client, std::vector<std::string> &cmd_split) {
 			this->_channels[i]->addClient(client);
 			std::cout << MSG_JOIN(client->get_nickname(), clean_channelName) << std::endl;
 			client->sendMessage(MSG_JOIN(client->get_nickname(), clean_channelName));
-			_channels[i]->sendRespToAll(client, "has joined the channel.");
+			_channels[i]->sendRespToAll(client, "has joined the channel.\r\n");
 			return ;
 		}
 	}

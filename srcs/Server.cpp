@@ -23,9 +23,6 @@ Server::Server() {
 
 Server::~Server() {
 	delete _TcpHandler;
-	for (size_t i = 0; i < _clients.size(); ++i) {
-		delete _clients[i];
-	}
 	for (size_t i = 0; i < _channels.size(); ++i) {
 		delete _channels[i];
 	}
@@ -189,9 +186,7 @@ void Server::shutdown_serv() {
 		close(_clients[i]->get_fd());
 		std::cout << "Client " << _clients[i]->get_fd() << " disconnected." << std::endl;
 		delete _clients[i];
-		_clients.erase(_clients.begin() + i);
 	}
-	_clients.clear();
 
 	// Fermer les channels
 	if (_TcpHandler->getSockServ() != -1)
