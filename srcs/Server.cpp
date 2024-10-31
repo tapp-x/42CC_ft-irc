@@ -272,9 +272,10 @@ void Server::exec_cmd(const std::string &cmd, int fd) {
 		}
 		if (this->get_client(fd)->get_status() != REGISTERED) {
 			std::cout << "Client not registered" << std::endl;
-			this->get_client(fd)->sendMessage("ERROR : You must be registered to use this server\r\n");
+			if (cmd_split[0] != "CAP")
+				this->get_client(fd)->sendMessage("ERROR : You must be registered to use this server\r\n");
 			this->get_client(fd)->set_cmdBuff("");
-			return ;
+			continue ;
 		}
 		if (cmd_split[0] == "JOIN") {
 			join_cmd(this->get_client(fd), cmd_split);
