@@ -153,8 +153,19 @@ void Server::displayClientInfo(Client *client) {
 	std::cout << "Operator: " << (client->is_operator() ? "Yes" : "No") << std::endl;
 }
 
+int	parse_port(int port) {
+	if (port < 1024 || port > 65535) {
+		std::cout << "port must be set between 1024 and 65535" << std::endl;
+		return (0);
+	}
+	return (port);
+}
+
 //LAUNCH & STOP SERV
-void	Server::init(int port, int maxclient, std::string password, std::string hostname) {
+void	Server::init(int raw_port, int maxclient, std::string password, std::string hostname) {
+	int	port = parse_port(raw_port);
+	if (!port)
+		return ;
 	this->_port = port;
 	this->_client_max = maxclient;
 	this->_password = password;
