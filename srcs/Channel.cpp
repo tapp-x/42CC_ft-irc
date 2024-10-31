@@ -6,7 +6,7 @@
 /*   By: tappourc <tappourc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 23:54:34 by tappourc          #+#    #+#             */
-/*   Updated: 2024/10/30 17:28:55 by tappourc         ###   ########.fr       */
+/*   Updated: 2024/10/31 22:21:51 by tappourc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,8 @@ Channel &Channel::operator=(const Channel &other) {
 		_key = other._key;
 		_limited = other._limited;
 		_limit = other._limit;
+		_time = other._time;
+		_topic_setter= other._topic_setter;
 		_clients = other._clients;
 		_admins = other._admins;
 		_invited = other._invited;
@@ -59,6 +61,10 @@ std::string Channel::getTopic() const {
 
 std::string Channel::getKey() const {
 	return (_key);
+}
+
+std::string Channel::getTime() const {
+	return (_time);
 }
 
 bool Channel::isLimited() const {
@@ -101,6 +107,14 @@ bool Channel::isAdmin(Client *client) const {
 	return (false);
 }
 
+std::string	Channel::getTopicSetter() const {
+	return (_topic_setter);	
+}
+
+bool Channel::isWithKey() const {
+	return (_isKey);
+}
+
 // SETTERS
 void Channel::setInviteOnly(bool inviteOnly) {
 	_inviteOnly = inviteOnly;
@@ -124,6 +138,18 @@ void Channel::setLimited(bool limited) {
 
 void Channel::setLimit(size_t limit) {
 	_limit = limit;
+}
+
+void Channel::setTime(const std::string &time) {
+	_time = time;
+}
+
+void Channel::setTopicSetter(const std::string name) {
+	_topic_setter = name;
+}
+
+void Channel::setIsKey(bool isKey) {
+	_isKey = isKey;
 }
 
 // METHODS
