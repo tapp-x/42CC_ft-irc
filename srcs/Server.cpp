@@ -23,9 +23,6 @@ Server::Server() {
 
 Server::~Server() {
 	delete _TcpHandler;
-	for (size_t i = 0; i < _clients.size(); ++i) {
-		delete _clients[i];
-	}
 	for (size_t i = 0; i < _channels.size(); ++i) {
 		delete _channels[i];
 	}
@@ -153,8 +150,19 @@ void Server::displayClientInfo(Client *client) {
 	std::cout << "Operator: " << (client->is_operator() ? "Yes" : "No") << std::endl;
 }
 
+int	parse_port(int port) {
+	if (port < 1024 || port > 65535) {
+		std::cout << "port must be set between 1024 and 65535" << std::endl;
+		return (0);
+	}
+	return (port);
+}
+
 //LAUNCH & STOP SERV
-void	Server::init(int port, int maxclient, std::string password, std::string hostname) {
+void	Server::init(int raw_port, int maxclient, std::string password, std::string hostname) {
+	int	port = parse_port(raw_port);
+	if (!port)
+		return ;
 	this->_port = port;
 	this->_client_max = maxclient;
 	this->_password = password;
@@ -178,9 +186,7 @@ void Server::shutdown_serv() {
 		close(_clients[i]->get_fd());
 		std::cout << "Client " << _clients[i]->get_fd() << " disconnected." << std::endl;
 		delete _clients[i];
-		_clients.erase(_clients.begin() + i);
 	}
-	_clients.clear();
 
 	// Fermer les channels
 	if (_TcpHandler->getSockServ() != -1)
@@ -261,9 +267,10 @@ void Server::exec_cmd(const std::string &cmd, int fd) {
 		}
 		if (this->get_client(fd)->get_status() != REGISTERED) {
 			std::cout << "Client not registered" << std::endl;
-			this->get_client(fd)->sendMessage("ERROR : You must be registered to use this server\r\n");
+			if (cmd_split[0] != "CAP")
+				this->get_client(fd)->sendMessage("ERROR : You must be registered to use this server\r\n");
 			this->get_client(fd)->set_cmdBuff("");
-			return ;
+			continue ;
 		}
 		if (cmd_split[0] == "JOIN") {
 			join_cmd(this->get_client(fd), cmd_split);

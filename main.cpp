@@ -34,4 +34,3 @@ int main(int argc, char **argv)
 		std::cout << e.what() << std::endl;
 	}
 }
-// port can be set between 1024 & 65535
