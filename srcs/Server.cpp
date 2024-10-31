@@ -6,7 +6,7 @@
 /*   By: tappourc <tappourc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/29 10:49:41 by tappourc          #+#    #+#             */
-/*   Updated: 2024/10/30 17:08:03 by tappourc         ###   ########.fr       */
+/*   Updated: 2024/10/31 11:34:56 by tappourc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -217,6 +217,9 @@ void Server::checkAndRemoveClient() {
 
 // HANDLE CHANNELS
 void Server::createChannel(const std::string &channelName, Client *client) {
+	// std::cout << "-------" << std::endl;
+	// displayClientInfo(client);
+	// std::cout << "-------" << std::endl;
 	std::cout << "enter with client " << client->get_fd() << std::endl;
 	std::string clean_channelName = channelName;
 	clean_channelName.erase(clean_channelName.find_last_not_of(" \n\r\t") + 1);
@@ -250,33 +253,46 @@ void Server::exec_cmd(const std::string &cmd, int fd) {
 	// displayClientInfo(this->get_client(fd));
 	this->get_client(fd)->set_cmdBuff(cmd);
 	std::vector<std::string> commands = splitCommands(cmd);
-	for (size_t i = 0; i < commands.size(); ++i) {
+	for (size_t i = 0; i < commands.size(); i++) {
+		// std::cout << "passed here" << std::endl;
 		std::vector<std::string> cmd_split = splitter(commands[i], ' ');
-		if (cmd_split[0] == "join" || cmd_split[0] == "JOIN") {
+		if (cmd_split[0] == "PASS") {
+			pass_cmd(this->get_client(fd), cmd_split);
+		}
+		if (this->get_client(fd)->get_status() != REGISTERED) {
+			std::cout << "Client not registered" << std::endl;
+			this->get_client(fd)->sendMessage("ERROR : You must be registered to use this server\r\n");
+			this->get_client(fd)->set_cmdBuff("");
+			return ;
+		}
+		if (cmd_split[0] == "JOIN") {
 			join_cmd(this->get_client(fd), cmd_split);
 		}
-		if (cmd_split[0] == "nick" || cmd_split[0] == "NICK") {
+		if (cmd_split[0] == "NICK") {
 			nick_cmd(this->get_client(fd), cmd_split[1]);
 		}
-		if (cmd_split[0] == "user" || cmd_split[0] == "USER") {
+		if (cmd_split[0] == "USER") {
 			user_cmd(this->get_client(fd), cmd_split[1]);
 		}
-		if (cmd_split[0] == "privmsg" || cmd_split[0] == "PRIVMSG") {
+		if (cmd_split[0] == "PRIVMSG") {
 			privmsg_cmd(this->get_client(fd), cmd);
 		}
-		if (cmd_split[0] == "quit" || cmd_split[0] == "QUIT") {
+		if (cmd_split[0] == "QUIT") {
 			quit_cmd(this->get_client(fd), cmd);
 		}
-		if (cmd_split[0] == "invite" || cmd_split[0] == "INVITE") {
+		if (cmd_split[0] == "INVITE") {
 			invite_cmd(this->get_client(fd), cmd_split);
 		}
-		if (cmd_split[0] == "part" || cmd_split[0] == "PART") {
+		if (cmd_split[0] == "PART") {
 			part_cmd(this->get_client(fd), cmd);
 		}
-		if (cmd_split[0] == "kick" || cmd_split[0] == "KICK") {
+		if (cmd_split[0] == "KICK") {
 			kick_cmd(this->get_client(fd), cmd);
 		}
-		// if (cmd_split[0] == "topic" || cmd_split[0] == "TOPIC") {
+		// if (cmd_split[0] == "MODE") {
+		// 	mode_cmd(this->get_client(fd), cmd_split);
+		// }
+		// if (cmd_split[0] == "TOPIC") {
 		// 	topic_cmd(this->get_client(fd), cmd_split);
 		// }
 	}

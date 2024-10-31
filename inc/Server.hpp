@@ -6,7 +6,7 @@
 /*   By: tappourc <tappourc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 18:15:45 by tappourc          #+#    #+#             */
-/*   Updated: 2024/10/30 17:10:29 by tappourc         ###   ########.fr       */
+/*   Updated: 2024/10/31 10:31:24 by tappourc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ class Server {
 		void				invite_cmd(Client *client, std::vector<std::string> cmd_split);
 		void				part_cmd(Client *client, const std::string &cmd);
 		void				kick_cmd(Client *client, const std::string &cmd);
+		void				pass_cmd(Client *client, const std::vector<std::string> cmd_split);
 
 	// UTILS FOR EXEC	
 		std::vector<std::string>	splitter(const std::string &str, char space);
@@ -89,6 +90,7 @@ class Server {
 		void						exec_cmd(const std::string &cmd, int fd);
 		void						msgOnChannel(Client *client, const std::string &channelName, const std::string &message);
 		void						msgPrivate(Client *client, const std::string &target, const std::string &message);
+		void						checkPassword(Client *client, std::string &password);
 
 	// DEBUG
 		void				display_info();

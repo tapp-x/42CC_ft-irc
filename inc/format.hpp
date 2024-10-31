@@ -6,7 +6,7 @@
 /*   By: tappourc <tappourc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 17:44:10 by tappourc          #+#    #+#             */
-/*   Updated: 2024/10/30 17:29:40 by tappourc         ###   ########.fr       */
+/*   Updated: 2024/10/31 10:25:53 by tappourc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,5 +39,6 @@
 #define ERR_NEEDMOREPARAMS(command) "461 " + command + " :Not enough parameters" + EOL
 #define ERR_ALREADYINVITED(nickname) "467 :" + nickname + " Already invited" + EOL
 #define ERR_CHANPRIVSNEEDED(channel) "482 " + channel + " :You're not channel operator" + EOL
+#define ERR_PASSWDMISMATCH(nickname) "464 :"+ nickname + " :Password incorrect" + EOL
 
 #endif
