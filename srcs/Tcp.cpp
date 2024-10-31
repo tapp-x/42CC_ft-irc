@@ -137,6 +137,8 @@ void	Tcp::handleClientMessage(int clientFd) {
 	if (bytesRead <= 0) {
 		// std::cout << "Error or client disconnected with fd " << clientFd << std::endl;
 		removeClient(clientFd);
+	} else if (bytesRead == 1 && buffer[0] == '\n') {
+		return ;
 	} else {
 		std::string message(buffer, bytesRead);
 		// std::cout << "Received message from client " << clientFd << ": " << message << std::endl;
