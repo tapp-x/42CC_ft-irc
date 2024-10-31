@@ -289,9 +289,9 @@ void Server::exec_cmd(const std::string &cmd, int fd) {
 		if (cmd_split[0] == "KICK") {
 			kick_cmd(this->get_client(fd), cmd);
 		}
-		// if (cmd_split[0] == "MODE") {
-		// 	mode_cmd(this->get_client(fd), cmd_split);
-		// }
+		if (cmd_split[0] == "TOPIC") {
+			topic_cmd(this->get_client(fd), cmd);
+		}
 		// if (cmd_split[0] == "TOPIC") {
 		// 	topic_cmd(this->get_client(fd), cmd_split);
 		// }

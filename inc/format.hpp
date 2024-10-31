@@ -28,6 +28,7 @@
 #define MSG_PRIVMSG(nickname, target, message) ":" + nickname + " PRIVMSG " + target + " :" + message + EOL
 #define MSG_QUIT(nickname, username, reason) ":" + nickname + "!~" + username +"@localhost QUIT " + reason + EOL
 #define MSG_TOPIC(nickname, channel, topic) ":" + nickname + " TOPIC " + channel + " :" + topic + EOL
+#define MSG_TOPICTIME(nickname, channel, time) ": 333 " + nickname + " " + channel + " " + nickname + " " + time + EOL
 
 #define RPL_INVITING(sender, receiver, channel) "341 " + sender + " " + receiver + " " + channel + EOL
 #define RPL_INVITED(receiver, channel) ":" + receiver + "!" + receiver + " INVITE " + receiver + " " + channel + EOL
@@ -40,5 +41,7 @@
 #define ERR_ALREADYINVITED(nickname) "467 :" + nickname + " Already invited" + EOL
 #define ERR_CHANPRIVSNEEDED(channel) "482 " + channel + " :You're not channel operator" + EOL
 #define ERR_PASSWDMISMATCH(nickname) "464 :"+ nickname + " :Password incorrect" + EOL
+#define ERR_NOTONCHANNEL(channel) "442 " + channel + " :You're not on that channel" + EOL
+#define ERR_NOTOPIC(nickname, channel) ": 331 " + nickname + " " + channel + " :No topic is set" + EOL
 
 #endif
