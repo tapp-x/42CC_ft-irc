@@ -6,7 +6,7 @@
 /*   By: tappourc <tappourc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 23:54:44 by tappourc          #+#    #+#             */
-/*   Updated: 2024/10/30 17:29:02 by tappourc         ###   ########.fr       */
+/*   Updated: 2024/10/31 22:20:54 by tappourc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,11 +28,14 @@ private:
 		std::string					_name;
 		std::string					_topic;
 		std::string					_key;
+		std::string					_time;
+		std::string					_topic_setter;
 
 	// PARAMETERS
 		bool						_inviteOnly;
 		bool						_topicRestricted;
 		bool						_limited;
+		bool						_isKey;
 		size_t						_limit;
 
 public:
@@ -46,6 +49,8 @@ public:
 		std::string					getName() const;
 		std::string					getTopic() const;
 		std::string					getKey() const;
+		std::string					getTime() const;
+		std::string					getTopicSetter()const;
 		size_t						getLimit() const;
 		std::vector<Client *>		getClients() const;
 		std::vector<Client *>		getAdmins() const;
@@ -56,14 +61,18 @@ public:
 		bool						isInviteOnly() const;
 		bool						isClient(Client *client) const;
 		bool						isAdmin(Client *client) const;
+		bool						isWithKey() const;
 
 	// SETTERS
 		void						setInviteOnly(bool inviteOnly);
 		void						setTopicRestricted(bool topicRestricted);
+		void						setTopicSetter(const std::string name);
 		void						setTopic(const std::string &topic);
+		void						setTime(const std::string &time);
 		void						setKey(const std::string &key);
 		void						setLimited(bool limited);
 		void						setLimit(size_t limit);
+		void						setIsKey(bool isKey);
 
 	// METHODS
 		void						addClient(Client *client);

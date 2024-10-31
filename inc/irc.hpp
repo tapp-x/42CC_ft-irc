@@ -6,7 +6,7 @@
 /*   By: tappourc <tappourc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/29 10:53:19 by tappourc          #+#    #+#             */
-/*   Updated: 2024/10/28 19:29:38 by tappourc         ###   ########.fr       */
+/*   Updated: 2024/10/31 18:30:28 by tappourc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 #include <cstring>
 #include <unistd.h>
 #include <cstdlib>
+#include <ctime>
 
 // ERROR LIBRARY
 #include <exception>
