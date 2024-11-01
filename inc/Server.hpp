@@ -6,7 +6,7 @@
 /*   By: tappourc <tappourc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 18:15:45 by tappourc          #+#    #+#             */
-/*   Updated: 2024/10/31 10:31:24 by tappourc         ###   ########.fr       */
+/*   Updated: 2024/11/01 16:48:35 by tappourc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,7 @@ class Server {
 		void						setTopicProtectionMode(Client *client, const std::string &channelName, char mode);
 		void						setOperatorMode(Client *client_sender, const std::string &channelName, char mode, const std::string &nickname);
 		void						setKeyMode(Client *client, const std::string &channelName, char mode, const std::string &key);
+		void						checkPermToJoin(Client *client, Channel *chan, std::vector<std::string> &cmd_split);
 
 	// DEBUG
 		void				display_info();
