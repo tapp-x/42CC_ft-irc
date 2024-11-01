@@ -69,12 +69,12 @@ void Server::change_topic_cmd(Client *client, const std::string &cmd, const std:
 void	Server::topic_cmd(Client *client, const std::string &cmd) {
 	std::cout << "TOPIC CMD with :" << cmd <<std::endl;
 	std::vector<std::string> cmd_split = this->splitter(cmd, ' ');
-	std::string channelName = cmd_split[1];
-	channelName.erase(channelName.find_last_not_of(" \n\r\t") + 1);
 	if (cmd_split.size() < 2) {
 		client->sendMessage(ERR_NEEDMOREPARAMS(cmd_split[0]));
 		return ;
 	}
+	std::string channelName = cmd_split[1];
+	channelName.erase(channelName.find_last_not_of(" \n\r\t") + 1);
 	if (!get_channel(channelName)) {
 		client->sendMessage(ERR_NOSUCHCHANNEL(channelName));
 		return ;

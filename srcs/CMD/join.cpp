@@ -13,6 +13,10 @@
 #include "../../inc/Server.hpp"
 
 void	Server::join_cmd(Client *client, std::vector<std::string> &cmd_split) {
+	if (cmd_split.size() == 1) {
+		client->sendMessage("ERROR : You must provide a valid channel name\r\n");
+		return ;
+	}
 	std::string clean_channelName = cmd_split[1];
 	if (clean_channelName[0] != '#')
 	{

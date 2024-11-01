@@ -262,8 +262,10 @@ void Server::exec_cmd(const std::string &cmd, int fd) {
 	for (size_t i = 0; i < commands.size(); i++) {
 		// std::cout << "passed here" << std::endl;
 		std::vector<std::string> cmd_split = splitter(commands[i], ' ');
+		// std::cout << "tryng command: " << cmd_split[0] << std::endl;
 		if (cmd_split[0] == "PASS") {
 			pass_cmd(this->get_client(fd), cmd_split);
+			continue ;
 		}
 		if (this->get_client(fd)->get_status() != REGISTERED) {
 			std::cout << "Client not registered" << std::endl;
@@ -272,14 +274,30 @@ void Server::exec_cmd(const std::string &cmd, int fd) {
 			this->get_client(fd)->set_cmdBuff("");
 			continue ;
 		}
-		if (cmd_split[0] == "JOIN") {
-			join_cmd(this->get_client(fd), cmd_split);
-		}
 		if (cmd_split[0] == "NICK") {
+			if (cmd_split.size() == 1) {
+				this->get_client(fd)->sendMessage("ERROR : You must provide a valid nickname\r\n");
+				continue ;
+			}
 			nick_cmd(this->get_client(fd), cmd_split[1]);
+			continue ;
 		}
 		if (cmd_split[0] == "USER") {
+			if (cmd_split.size() == 1) {
+				this->get_client(fd)->sendMessage("ERROR : You must provide a valid username\r\n");
+				continue ;
+			}
 			user_cmd(this->get_client(fd), cmd_split[1]);
+			continue ;
+		}
+		if (this->get_client(fd)->get_nickname().length() < 1 && this->get_client(fd)->get_username().length() < 1) {
+			std::cout << "Client not identified" << std::endl;
+			this->get_client(fd)->sendMessage("ERROR : You must be identified to use this server, use <NICK> and <USER>\r\n");
+			this->get_client(fd)->set_cmdBuff("");
+			continue ;
+		}
+		if (cmd_split[0] == "JOIN") {
+			join_cmd(this->get_client(fd), cmd_split);
 		}
 		if (cmd_split[0] == "PRIVMSG") {
 			privmsg_cmd(this->get_client(fd), cmd);
