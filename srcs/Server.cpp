@@ -186,7 +186,6 @@ void Server::shutdown_serv() {
 		close(_clients[i]->get_fd());
 		std::cout << "Client " << _clients[i]->get_fd() << " disconnected." << std::endl;
 		delete _clients[i];
-		_clients.erase(_clients.begin());
 	}
 
 	// Fermer les channels
