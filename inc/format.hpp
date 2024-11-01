@@ -6,7 +6,7 @@
 /*   By: tappourc <tappourc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 17:44:10 by tappourc          #+#    #+#             */
-/*   Updated: 2024/10/31 10:25:53 by tappourc         ###   ########.fr       */
+/*   Updated: 2024/11/01 17:01:12 by tappourc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,12 +37,17 @@
 #define ERR_NOSUCHNICK(nickname) "401 " + nickname + " :No such nick/channel" + EOL
 #define ERR_NOSUCHCHANNEL(channel) "403 " + channel + " :No such channel" + EOL
 #define ERR_CANNOTSENDTOCHAN(channel) "404 " + channel + " :Cannot send to channel" + EOL
-#define ERR_NICKNAMEINUSE(nickname) "433 " + nickname + " :Nickname is already in use" + EOL
+#define ERR_NICKNAMEINUSE(nickname) ": 433 " + nickname + " :Nickname is already in use" + EOL
+#define ERR_USRNAMEINUSE(username) ": 433 " + username + " :Username is already in use" + EOL
 #define ERR_NEEDMOREPARAMS(command) "461 " + command + " :Not enough parameters" + EOL
 #define ERR_ALREADYINVITED(nickname) "467 :" + nickname + " Already invited" + EOL
 #define ERR_CHANPRIVSNEEDED(channel) "482 " + channel + " :You're not channel operator" + EOL
-#define ERR_PASSWDMISMATCH(nickname) "464 :"+ nickname + " :Password incorrect" + EOL
 #define ERR_NOTONCHANNEL(channel) "442 " + channel + " :You're not on that channel" + EOL
 #define ERR_NOTOPIC(nickname, channel) ": 331 " + nickname + " " + channel + " :No topic is set" + EOL
+
+
+#define ERR_NOTINVITED(nickname, channel) ":localhost 473 " + nickname + " " + channel + " :Cannot join channel (+i)" + EOL
+#define ERR_PASSWDMISMATCH(nickname, channel) ":localhost 475 :" + nickname + " " + channel + " :Cannot join channel (+k) - bad key" + EOL
+#define ERR_CHANLISFULL(nickname, channel) ":localhost 471 " + nickname + " " + channel + " :Cannot join channel (+l)" + EOL
 
 #endif
