@@ -263,6 +263,10 @@ void Server::exec_cmd(const std::string &cmd, int fd) {
 		std::vector<std::string> cmd_split = splitter(commands[i], ' ');
 		// std::cout << "tryng command: " << cmd_split[0] << std::endl;
 		if (cmd_split[0] == "PASS") {
+			if (this->get_client(fd)->get_status() == REGISTERED) {
+				this->get_client(fd)->sendMessage("ERROR : Already registered\r\n");
+				this->get_client(fd)->set_cmdBuff("");
+			}
 			pass_cmd(this->get_client(fd), cmd_split);
 			continue ;
 		}
@@ -276,6 +280,7 @@ void Server::exec_cmd(const std::string &cmd, int fd) {
 		if (cmd_split[0] == "NICK") {
 			if (cmd_split.size() == 1) {
 				this->get_client(fd)->sendMessage("ERROR : You must provide a valid nickname\r\n");
+				this->get_client(fd)->set_cmdBuff("");
 				continue ;
 			}
 			nick_cmd(this->get_client(fd), cmd_split[1]);
@@ -284,6 +289,7 @@ void Server::exec_cmd(const std::string &cmd, int fd) {
 		if (cmd_split[0] == "USER") {
 			if (cmd_split.size() == 1) {
 				this->get_client(fd)->sendMessage("ERROR : You must provide a valid username\r\n");
+				this->get_client(fd)->set_cmdBuff("");
 				continue ;
 			}
 			user_cmd(this->get_client(fd), cmd_split[1]);
@@ -319,9 +325,9 @@ void Server::exec_cmd(const std::string &cmd, int fd) {
 		if (cmd_split[0] == "MODE") {
 			mode_cmd(this->get_client(fd), cmd);
 		}
-		// if (cmd_split[0] == "WHO") {
-		// 	who_cmd(this->get_client(fd), cmd);
-		// }
+		if (cmd_split[0] == "WHO") {
+			who_cmd(this->get_client(fd), cmd_split);
+		}
 	}
 	this->get_client(fd)->set_cmdBuff("");
 }

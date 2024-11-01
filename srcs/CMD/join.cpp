@@ -47,10 +47,15 @@ void	Server::checkPermToJoin(Client *client, Channel *chan, std::vector<std::str
 		std::cout << MSG_JOIN(client->get_nickname(), chan->getName()) << std::endl;
 		client->sendMessage(MSG_JOIN(client->get_nickname(), chan->getName()));
 		chan->sendMsgToAll(client, "has joined the channel.");
+    who_cmd(client, cmd_split);
 	}
 }
 
 void	Server::join_cmd(Client *client, std::vector<std::string> &cmd_split) {
+	if (cmd_split.size() == 1) {
+		client->sendMessage("ERROR : You must provide a valid channel name\r\n");
+		return ;
+	}
 	std::string clean_channelName = cmd_split[1];
 	if (clean_channelName[0] != '#')
 	{
@@ -60,7 +65,7 @@ void	Server::join_cmd(Client *client, std::vector<std::string> &cmd_split) {
 	clean_channelName.erase(clean_channelName.find_last_not_of(" \n\r\t") + 1);
 	for(size_t i = 0; i < this->_channels.size(); i++) {
 		if (this->_channels[i]->getName() == clean_channelName) {
-			checkPermToJoin(client, this->_channels[i], cmd_split);	
+			checkPermToJoin(client, this->_channels[i], cmd_split);
 			return ;
 		}
 	}

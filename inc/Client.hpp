@@ -56,7 +56,7 @@ class Client {
 		void			set_ip(std::string ipadd);
 		void			set_status(ClientStatus new_status);
 		void			set_operator(bool op);
-		void			set_cmdBuff(std::string cmd);
+		void			set_cmdBuff(const std::string &cmd);
 		
 	// METHODS
 		bool			sendMessage(const std::string &message);

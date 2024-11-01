@@ -33,6 +33,7 @@ SRCS = \
 		./srcs/CMD/pass.cpp \
 		./srcs/CMD/topic.cpp \
 		./srcs/CMD/mode.cpp \
+		./srcs/CMD/who.cpp \
 
 OBJS = $(SRCS:.cpp=.o)
 
