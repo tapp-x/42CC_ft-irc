@@ -82,6 +82,7 @@ class Server {
 		void				pass_cmd(Client *client, const std::vector<std::string> cmd_split);
 		void				topic_cmd(Client *client, const std::string &cmd);
 		void				mode_cmd(Client *client, const std::string &cmd);
+		void				who_cmd(Client *client, const std::string &cmd);
 
 	// UTILS FOR EXEC	
 		std::vector<std::string>	splitter(const std::string &str, char space);

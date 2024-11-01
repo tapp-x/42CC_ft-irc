@@ -320,6 +320,9 @@ void Server::exec_cmd(const std::string &cmd, int fd) {
 		if (cmd_split[0] == "MODE") {
 			mode_cmd(this->get_client(fd), cmd);
 		}
+		if (cmd_split[0] == "WHO") {
+			who_cmd(this->get_client(fd), cmd);
+		}
 	}
 	this->get_client(fd)->set_cmdBuff("");
 }
