@@ -186,6 +186,7 @@ void Server::shutdown_serv() {
 		close(_clients[i]->get_fd());
 		std::cout << "Client " << _clients[i]->get_fd() << " disconnected." << std::endl;
 		delete _clients[i];
+		_clients.erase(_clients.begin());
 	}
 
 	// Fermer les channels
@@ -277,6 +278,7 @@ void Server::exec_cmd(const std::string &cmd, int fd) {
 		if (cmd_split[0] == "NICK") {
 			if (cmd_split.size() == 1) {
 				this->get_client(fd)->sendMessage("ERROR : You must provide a valid nickname\r\n");
+				this->get_client(fd)->set_cmdBuff("");
 				continue ;
 			}
 			nick_cmd(this->get_client(fd), cmd_split[1]);
@@ -285,6 +287,7 @@ void Server::exec_cmd(const std::string &cmd, int fd) {
 		if (cmd_split[0] == "USER") {
 			if (cmd_split.size() == 1) {
 				this->get_client(fd)->sendMessage("ERROR : You must provide a valid username\r\n");
+				this->get_client(fd)->set_cmdBuff("");
 				continue ;
 			}
 			user_cmd(this->get_client(fd), cmd_split[1]);

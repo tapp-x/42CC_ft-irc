@@ -92,7 +92,7 @@ void	Client::set_operator(bool op) {
 	this->_operator = op;
 }
 
-void	Client::set_cmdBuff(std::string cmd) {
+void	Client::set_cmdBuff(const std::string &cmd) {
 	this->_cmdBuff = cmd;
 }
 
