@@ -13,8 +13,7 @@
 #include "../../inc/Server.hpp"
 #include "../../inc/irc.hpp"
 
-void	Server::who_cmd(Client *client, const std::string &cmd) {
-	std::vector<std::string> cmd_split = this->splitter(cmd, ' ');
+void	Server::who_cmd(Client *client, std::vector<std::string> &cmd_split) {
 	if (cmd_split.size() != 2) {
 		return;
 	}

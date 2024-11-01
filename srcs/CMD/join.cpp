@@ -30,6 +30,7 @@ void	Server::join_cmd(Client *client, std::vector<std::string> &cmd_split) {
 			std::cout << MSG_JOIN(client->get_nickname(), clean_channelName) << std::endl;
 			client->sendMessage(MSG_JOIN(client->get_nickname(), clean_channelName));
 			_channels[i]->sendRespToAll(client, "has joined the channel.\r\n");
+			who_cmd(client, cmd_split);
 			return ;
 		}
 	}

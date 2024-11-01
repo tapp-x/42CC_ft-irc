@@ -265,6 +265,10 @@ void Server::exec_cmd(const std::string &cmd, int fd) {
 		std::vector<std::string> cmd_split = splitter(commands[i], ' ');
 		// std::cout << "tryng command: " << cmd_split[0] << std::endl;
 		if (cmd_split[0] == "PASS") {
+			if (this->get_client(fd)->get_status() == REGISTERED) {
+				this->get_client(fd)->sendMessage("ERROR : Already registered\r\n");
+				this->get_client(fd)->set_cmdBuff("");
+			}
 			pass_cmd(this->get_client(fd), cmd_split);
 			continue ;
 		}
@@ -324,7 +328,7 @@ void Server::exec_cmd(const std::string &cmd, int fd) {
 			mode_cmd(this->get_client(fd), cmd);
 		}
 		if (cmd_split[0] == "WHO") {
-			who_cmd(this->get_client(fd), cmd);
+			who_cmd(this->get_client(fd), cmd_split);
 		}
 	}
 	this->get_client(fd)->set_cmdBuff("");
