@@ -52,6 +52,11 @@ void	Server::checkPermToJoin(Client *client, Channel *chan, std::vector<std::str
 
 void	Server::join_cmd(Client *client, std::vector<std::string> &cmd_split) {
 	std::string clean_channelName = cmd_split[1];
+	if (clean_channelName[0] != '#')
+	{
+		client->sendMessage("ERROR : channels must start with <#> character !\r\n");
+		return ;
+	}
 	clean_channelName.erase(clean_channelName.find_last_not_of(" \n\r\t") + 1);
 	for(size_t i = 0; i < this->_channels.size(); i++) {
 		if (this->_channels[i]->getName() == clean_channelName) {

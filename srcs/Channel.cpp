@@ -199,7 +199,7 @@ void Channel::removeInvited(const std::string &nickname) {
 void	Channel::sendMsgToAll(Client *client, const std::string &message) {
 	// std::cout << "msg : " << message << std::endl;
 	for (size_t i = 0; i < _clients.size(); i++) {
-		if (_clients[i] != client) {
+		if (_clients[i]->get_fd() != client->get_fd()) {
 			_clients[i]->sendMessage(MSG_PRIVMSG(client->get_nickname(), _name, message));
 		}
 	}

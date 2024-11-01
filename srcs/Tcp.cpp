@@ -15,7 +15,12 @@
 
 // BASICS
 Tcp::Tcp(Server *server) : _sockServ(), _server(server) {}
-Tcp::~Tcp() {}
+Tcp::~Tcp() {
+	for (size_t i = 0; i < _sockClient.size(); i++)
+	{
+		delete _sockClient[i];
+	}
+}
 Tcp::Tcp(const Tcp &other) : _sockServ(other._sockServ), _sockClient(other._sockClient){}
 
 Tcp &Tcp::operator=(const Tcp &other){
@@ -137,6 +142,8 @@ void	Tcp::handleClientMessage(int clientFd) {
 	if (bytesRead <= 0) {
 		// std::cout << "Error or client disconnected with fd " << clientFd << std::endl;
 		removeClient(clientFd);
+	} else if (bytesRead == 1 && buffer[0] == '\n') {
+		return ;
 	} else {
 		std::string message(buffer, bytesRead);
 		// std::cout << "Received message from client " << clientFd << ": " << message << std::endl;
