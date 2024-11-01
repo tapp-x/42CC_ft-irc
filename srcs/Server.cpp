@@ -6,7 +6,7 @@
 /*   By: tappourc <tappourc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/29 10:49:41 by tappourc          #+#    #+#             */
-/*   Updated: 2024/10/31 11:34:56 by tappourc         ###   ########.fr       */
+/*   Updated: 2024/11/01 16:53:26 by tappourc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -260,7 +260,6 @@ void Server::exec_cmd(const std::string &cmd, int fd) {
 	this->get_client(fd)->set_cmdBuff(cmd);
 	std::vector<std::string> commands = splitCommands(cmd);
 	for (size_t i = 0; i < commands.size(); i++) {
-		// std::cout << "passed here" << std::endl;
 		std::vector<std::string> cmd_split = splitter(commands[i], ' ');
 		// std::cout << "tryng command: " << cmd_split[0] << std::endl;
 		if (cmd_split[0] == "PASS") {
