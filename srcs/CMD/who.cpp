@@ -31,8 +31,8 @@ void	Server::who_cmd(Client *client, std::vector<std::string> &cmd_split) {
 			_channels[i]->sendRespToAll(client, WHO_START(client->get_nickname(), clean_channelName));
 			for (size_t j = 0; j < _channels[i]->getNbClients(); j++)
 			{
-				client->sendMessage(WHO_USER(_channels[i]->getClients()[j]->get_nickname()));
-				_channels[i]->sendRespToAll(client, WHO_USER(_channels[i]->getClients()[j]->get_nickname()));
+				client->sendMessage(_channels[i]->isAdmin(_channels[i]->getClients()[j]) ? WHO_OP(_channels[i]->getClients()[j]->get_nickname()) : WHO_USER(_channels[i]->getClients()[j]->get_nickname()));
+				_channels[i]->sendRespToAll(client, _channels[i]->isAdmin(_channels[i]->getClients()[j]) ? WHO_OP(_channels[i]->getClients()[j]->get_nickname()) : WHO_USER(_channels[i]->getClients()[j]->get_nickname()));
 			}
 			client->sendMessage(WHO_END(client->get_nickname(), clean_channelName));
 			_channels[i]->sendRespToAll(client, WHO_END(client->get_nickname(), clean_channelName));

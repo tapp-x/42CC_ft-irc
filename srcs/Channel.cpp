@@ -16,7 +16,7 @@
 
 // BASICS
 Channel::Channel(const std::string &name)
-	: _name(name), _inviteOnly(false), _topicRestricted(false), _limited(false), _limit(0) {}
+	: _name(name), _inviteOnly(false), _topicRestricted(false), _limited(false), _isKey(false), _limit(0) {}
 
 Channel::~Channel() {}
 
@@ -34,10 +34,11 @@ Channel &Channel::operator=(const Channel &other) {
 		_limited = other._limited;
 		_limit = other._limit;
 		_time = other._time;
-		_topic_setter= other._topic_setter;
+		_topic_setter = other._topic_setter;
 		_clients = other._clients;
 		_admins = other._admins;
 		_invited = other._invited;
+		_isKey = other._isKey;
 	}
 	return (*this);
 }

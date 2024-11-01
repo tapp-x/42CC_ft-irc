@@ -31,7 +31,8 @@
 #define MSG_TOPICTIME(nickname, channel, time) ": 333 " + nickname + " " + channel + " " + nickname + " " + time + EOL
 #define MSG_CHANMODE(nickname, channel, mode, args) ":" + nickname + " MODE " + channel + " " + mode + " " + args + EOL
 #define WHO_START(nickname, channel) ": 353 " + nickname + " @ " + channel + " :"
-#define WHO_USER(nickname) "@" + nickname + " "
+#define WHO_OP(nickname) "@" + nickname + " "
+#define WHO_USER(nickname) "+" + nickname + " "
 #define WHO_END(nickname, channel) "\r\n: 366 " + nickname + " " + channel + " :END of /NAMES list" + EOL
 
 #define RPL_INVITING(sender, receiver, channel) "341 " + sender + " " + receiver + " " + channel + EOL

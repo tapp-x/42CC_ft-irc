@@ -215,6 +215,7 @@ void Server::checkAndRemoveClient() {
 		int clientFd = (*it)->get_fd();
 		if (!_TcpHandler->clientExists(clientFd)) {
 			std::cout << "Removing client with fd " << clientFd << " from server" << std::endl;
+			delete *it;
 			it = _clients.erase(it);
 		} else
 			++it;
@@ -266,6 +267,7 @@ void Server::exec_cmd(const std::string &cmd, int fd) {
 			if (this->get_client(fd)->get_status() == REGISTERED) {
 				this->get_client(fd)->sendMessage("ERROR : Already registered\r\n");
 				this->get_client(fd)->set_cmdBuff("");
+				continue ;
 			}
 			pass_cmd(this->get_client(fd), cmd_split);
 			continue ;
