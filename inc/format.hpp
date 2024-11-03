@@ -15,7 +15,7 @@
 
 #define EOL "\r\n"
 
-#define MSG_WELCOME(name) "Welcome to IRC network " + name + "!" + EOL
+#define MSG_WELCOME "Welcome to IRC network !\r\n"
 #define MSG_NICK(nickname) "Your nickname is " + nickname + EOL
 #define MSG_USER(username) "Your username is " + username + EOL
 #define MSG_YOURHOST(host) "Your host is " + host + EOL

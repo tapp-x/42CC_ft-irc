@@ -14,12 +14,9 @@ CXX = c++
 
 CXXFLAGS = -Wall -Wextra -Werror -g -std=c++98
 
-
-SRCS = \
-		main.cpp \
+BASE_SRC = \
 		./srcs/Socket.cpp \
 		./srcs/Tcp.cpp \
-		./srcs/Server.cpp \
 		./srcs/Client.cpp \
 		./srcs/Channel.cpp \
 		./srcs/CMD/join.cpp \
@@ -33,23 +30,45 @@ SRCS = \
 		./srcs/CMD/pass.cpp \
 		./srcs/CMD/topic.cpp \
 		./srcs/CMD/mode.cpp \
-		./srcs/CMD/who.cpp \
+		./srcs/CMD/who.cpp
+
+
+SRCS = \
+		$(BASE_SRC) \
+		main.cpp \
+		./srcs/Server.cpp
+
+
+BONUS_SRCS = \
+		$(BASE_SRC) \
+		main_bonus.cpp \
+		./srcs/Server_bonus.cpp \
+		./srcs/CMD/bot_bonus.cpp
 
 OBJS = $(SRCS:.cpp=.o)
+BONUS_OBJS = $(BONUS_SRCS:.cpp=.o)
 
 EXEC = ircserv
+BONUS_EXEC = ircserv_bonus
 
 all: $(EXEC)
 
 $(EXEC): $(OBJS)
 	$(CXX) $(CXXFLAGS) -o $@ $^
 
+bonus: $(BONUS_EXEC)
+
+$(BONUS_EXEC): $(BONUS_OBJS)
+	$(CXX) $(CXXFLAGS) -o $@ $^
+
 clean:
 	rm -f $(OBJS)
+	rm -f $(BONUS_OBJS)
 
 fclean: clean
 	rm -f $(EXEC)
+	rm -f $(BONUS_EXEC)
 
 re: fclean all
 
-.PHONY: all clean fclean re
+.PHONY: all clean fclean re bonus

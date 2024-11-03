@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Server.cpp                                         :+:      :+:    :+:   */
+/*   Server_bonus.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tappourc <tappourc@student.42.fr>          +#+  +:+       +#+        */
+/*   By: wneel <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/29 10:49:41 by tappourc          #+#    #+#             */
-/*   Updated: 2024/11/01 16:53:26 by tappourc         ###   ########.fr       */
+/*   Updated: 2024/11/03 18:56:14 by wneel            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/Server.hpp"
+#include "../inc/Server_bonus.hpp"
 
 //BASICS
 Server::Server() {
@@ -158,6 +158,19 @@ int	parse_port(int port) {
 	return (port);
 }
 
+void	Server::add_bot_client(void)
+{
+	int clientFd = 0xB07;
+	Client *newClient = new Client();
+	newClient->set_fd(clientFd);
+	newClient->set_ip("127.0.0.1");
+	newClient->set_username("Joke_de_Papa_(bot)");
+	newClient->set_nickname("Joke_de_Papa");
+	newClient->set_status(BOT);
+	_clients.push_back(newClient);
+	std::cout << "Client added with fd " << clientFd << " and IP " << newClient->get_ip() << " and nick : " << newClient->get_nickname() << std::endl;
+}
+
 //LAUNCH & STOP SERV
 void	Server::init(int raw_port, int maxclient, std::string password, std::string hostname) {
 	int	port = parse_port(raw_port);
@@ -172,8 +185,14 @@ void	Server::init(int raw_port, int maxclient, std::string password, std::string
 
 	this->display_info();
 	std::cout << "Server is running..." << std::endl;
+
+	bool	bot = false;
 	while(globalSig == false) {
 		_TcpHandler->run();
+		if (!bot) {
+			add_bot_client();
+			bot = true;
+		}
 		checkAndAddClient();
 		checkAndRemoveClient();
 	}
@@ -196,7 +215,7 @@ void Server::shutdown_serv() {
 
 // ADD & REMOVE CLIENT
 void Server::checkAndAddClient() {
-	if (_TcpHandler->getSockClientSize() > _clients.size()) {
+	if (_TcpHandler->getSockClientSize() > (_clients.size() - 1)) {
 		int clientFd = _TcpHandler->getLastFd();
 		std::string clientIp = _TcpHandler->getLastIp();
 		Client *newClient = new Client();
@@ -213,7 +232,7 @@ void Server::checkAndAddClient() {
 void Server::checkAndRemoveClient() {
 	for (std::vector<Client *>::iterator it = _clients.begin(); it != _clients.end(); ) {
 		int clientFd = (*it)->get_fd();
-		if (!_TcpHandler->clientExists(clientFd)) {
+		if (!_TcpHandler->clientExists(clientFd) && clientFd != 0xB07) {
 			std::cout << "Removing client with fd " << clientFd << " from server" << std::endl;
 			delete *it;
 			it = _clients.erase(it);
@@ -262,7 +281,7 @@ void Server::exec_cmd(const std::string &cmd, int fd) {
 	std::vector<std::string> commands = splitCommands(cmd);
 	for (size_t i = 0; i < commands.size(); i++) {
 		std::vector<std::string> cmd_split = splitter(commands[i], ' ');
-		// std::cout << "tryng command: " << cmd_split[0] << std::endl;
+		std::cout << "tryng command: " << cmd_split[0] << std::endl;
 		if (cmd_split[0] == "PASS") {
 			if (this->get_client(fd)->get_status() == REGISTERED) {
 				this->get_client(fd)->sendMessage("ERROR : Already registered\r\n");
@@ -329,6 +348,9 @@ void Server::exec_cmd(const std::string &cmd, int fd) {
 		}
 		if (cmd_split[0] == "WHO") {
 			who_cmd(this->get_client(fd), cmd_split);
+		}
+		if (cmd_split[0] == "JOKEDEPAPA" || (cmd_split[0].size() == 11 && cmd_split[0].substr(0, 10) == "JOKEDEPAPA" && cmd_split[0][cmd_split[0].size() - 1] == '\r')) {
+			jokedepapa(this->get_client(fd));
 		}
 	}
 	this->get_client(fd)->set_cmdBuff("");

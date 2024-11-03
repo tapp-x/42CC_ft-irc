@@ -18,7 +18,7 @@ void	Server::checkPassword(Client *client, std::string &password) {
 	password.erase(password.find_last_not_of(" \n\r\t") + 1);
 	if (password == _password) {
 		client->set_status(REGISTERED);
-		client->sendMessage(MSG_WELCOME(client->get_nickname()));
+		client->sendMessage(MSG_WELCOME);
 	} else {
 		client->sendMessage("ERROR : Password incorrect\r\n");
 	}

@@ -20,7 +20,8 @@ enum ClientStatus
 	WAITING,
 	LOGIN,
 	REGISTERED,
-	DISCONNECTED
+	DISCONNECTED,
+	BOT
 };
 
 class Client {
