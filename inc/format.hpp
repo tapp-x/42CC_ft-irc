@@ -25,8 +25,8 @@
 #define MSG_KICK(nickname, channel, reason) ":" + nickname + " KICK " + channel + " :" + reason + EOL
 #define MSG_MODE(nickname, channel, mode) ":" + nickname + " MODE " + channel + " " + mode + EOL
 #define MSG_PART(nickname, channel, reason) ":" + nickname + " PART " + channel + " :" + reason + EOL
-#define MSG_PRIVMSG(nickname, target, message) ":" + nickname + " PRIVMSG " + target + " :" + message + EOL
-#define MSG_QUIT(nickname, username, reason) ":" + nickname + "!~" + username +"@localhost QUIT " + reason + EOL
+#define MSG_PRIVMSG(nickname, target, message) ":" + nickname + "!" + nickname + "@localhost PRIVMSG " + target + " " + message + EOL
+#define MSG_QUIT(nickname, username, reason) ":" + nickname + "!~" + username + "@localhost QUIT " + reason + EOL
 #define MSG_TOPIC(nickname, channel, topic) ":" + nickname + " TOPIC " + channel + " :" + topic + EOL
 #define MSG_TOPICTIME(nickname, channel, time) ": 333 " + nickname + " " + channel + " " + nickname + " " + time + EOL
 #define MSG_CHANMODE(nickname, channel, mode, args) ":" + nickname + " MODE " + channel + " " + mode + " " + args + EOL
