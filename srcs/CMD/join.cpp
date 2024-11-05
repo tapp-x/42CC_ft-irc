@@ -6,7 +6,7 @@
 /*   By: tappourc <tappourc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 20:01:30 by tappourc          #+#    #+#             */
-/*   Updated: 2024/11/01 15:27:37 by tappourc         ###   ########.fr       */
+/*   Updated: 2024/11/05 20:35:53 by tappourc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,14 @@ void	Server::checkPermToJoin(Client *client, Channel *chan, std::vector<std::str
 			if (cmd_split[2] != chan->getKey()) {
 				canJoin = false;
 				client->sendMessage(ERR_PASSWDMISMATCH(client->get_nickname(), chan->getName()));
+				return ;
 			}
 			else
 				canJoin = true;
 		} else {
 			canJoin = false;
 			client->sendMessage(ERR_PASSWDMISMATCH(client->get_nickname(), chan->getName()));
+			return ;
 		}
 	}
 	if (chan->isInviteOnly() == true) {
@@ -32,22 +34,24 @@ void	Server::checkPermToJoin(Client *client, Channel *chan, std::vector<std::str
 		if (std::find(invited.begin(), invited.end(), client->get_nickname()) == invited.end()) {
 			canJoin = false;	
 			client->sendMessage(ERR_NOTINVITED(client->get_nickname(), chan->getName()));
+			return ;
 		}
 	}
 	if (chan->isLimited() == true) {
 		if (chan->getLimit() <= chan->getNbClients()) {
 			canJoin = false;
 			client->sendMessage(ERR_CHANLISFULL(client->get_nickname(), chan->getName()));
+			return ;
 		}
 		else
 			canJoin = true;
 	}
 	if (canJoin == true) {
 		chan->addClient(client);
-		std::cout << MSG_JOIN(client->get_nickname(), chan->getName()) << std::endl;
-		client->sendMessage(MSG_JOIN(client->get_nickname(), chan->getName()));
+		std::cout << MSG_JOIN(client->get_nickname(), client->get_username(), chan->getName()) << std::endl;
+		client->sendMessage(MSG_JOIN(client->get_nickname(), client->get_username(), chan->getName()));
 		chan->sendMsgToAll(client, "has joined the channel.");
-    who_cmd(client, cmd_split);
+		who_cmd(client, cmd_split);
 	}
 }
 

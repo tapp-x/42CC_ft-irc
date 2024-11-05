@@ -6,7 +6,7 @@
 /*   By: tappourc <tappourc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/29 10:49:41 by tappourc          #+#    #+#             */
-/*   Updated: 2024/11/01 16:53:26 by tappourc         ###   ########.fr       */
+/*   Updated: 2024/11/05 20:19:27 by tappourc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -235,8 +235,8 @@ void Server::createChannel(const std::string &channelName, Client *client) {
 	newChannel->addClient(client);
 	this->_channels.push_back(newChannel);
 	std::cout << "Channel " << clean_channelName << " created by client " << client->get_fd() << "." << std::endl;
-	std::cout << MSG_JOIN(client->get_nickname(), clean_channelName) << std::endl;
-	client->sendMessage(MSG_JOIN(client->get_nickname(), clean_channelName));
+	std::cout << MSG_JOIN(client->get_nickname(), client->get_username(), clean_channelName) << std::endl;
+	client->sendMessage(MSG_JOIN(client->get_nickname(), client->get_username(), clean_channelName));
 }
 
 

@@ -6,7 +6,7 @@
 /*   By: tappourc <tappourc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 17:44:10 by tappourc          #+#    #+#             */
-/*   Updated: 2024/11/01 17:01:12 by tappourc         ###   ########.fr       */
+/*   Updated: 2024/11/05 20:21:42 by tappourc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 #define MSG_USER(username) "Your username is " + username + EOL
 #define MSG_YOURHOST(host) "Your host is " + host + EOL
 #define MSG_CREATED(date) "This server was created " + date + EOL
-#define MSG_JOIN(nickname, channel) ":" + nickname + " JOIN " + channel + EOL
+#define MSG_JOIN(nickname, username, channel) ":" + nickname + "!" + username + "@localhost JOIN " + channel + EOL
 #define MSG_INVITE(nickname, channel) ":" + nickname + " INVITE " + channel + EOL
 #define MSG_KICK(nickname, channel, reason) ":" + nickname + " KICK " + channel + " :" + reason + EOL
 #define MSG_MODE(nickname, channel, mode) ":" + nickname + " MODE " + channel + " " + mode + EOL

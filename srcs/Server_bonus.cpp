@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server_bonus.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wneel <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: tappourc <tappourc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/29 10:49:41 by tappourc          #+#    #+#             */
-/*   Updated: 2024/11/03 18:56:14 by wneel            ###   ########.fr       */
+/*   Updated: 2024/11/05 20:18:56 by tappourc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -254,8 +254,8 @@ void Server::createChannel(const std::string &channelName, Client *client) {
 	newChannel->addClient(client);
 	this->_channels.push_back(newChannel);
 	std::cout << "Channel " << clean_channelName << " created by client " << client->get_fd() << "." << std::endl;
-	std::cout << MSG_JOIN(client->get_nickname(), clean_channelName) << std::endl;
-	client->sendMessage(MSG_JOIN(client->get_nickname(), clean_channelName));
+	std::cout << MSG_JOIN(client->get_nickname(), client->get_username(), clean_channelName) << std::endl;
+	client->sendMessage(MSG_JOIN(client->get_nickname(), client->get_username(), clean_channelName));
 }
 
 
