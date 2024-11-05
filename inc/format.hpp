@@ -22,7 +22,7 @@
 #define MSG_CREATED(date) "This server was created " + date + EOL
 #define MSG_JOIN(nickname, username, channel) ":" + nickname + "!" + username + "@localhost JOIN " + channel + EOL
 #define MSG_INVITE(nickname, channel) ":" + nickname + " INVITE " + channel + EOL
-#define MSG_KICK(nickname, channel, reason) ":" + nickname + " KICK " + channel + " :" + reason + EOL
+#define MSG_KICK(nickname, username, channel, target, reason) ":" + nickname + "!" + username + "@localhost KICK " + channel + " " + target + " :" + reason + "\r\n"
 #define MSG_MODE(nickname, channel, mode) ":" + nickname + " MODE " + channel + " " + mode + EOL
 #define MSG_PART(nickname, channel, reason) ":" + nickname + " PART " + channel + " :" + reason + EOL
 #define MSG_PRIVMSG(nickname, target, message) ":" + nickname + "!" + nickname + "@localhost PRIVMSG " + target + " " + message + EOL
@@ -38,20 +38,20 @@
 #define RPL_INVITING(sender, receiver, channel) "341 " + sender + " " + receiver + " " + channel + EOL
 #define RPL_INVITED(receiver, channel) ":" + receiver + "!" + receiver + " INVITE " + receiver + " " + channel + EOL
 
-#define ERR_NOSUCHNICK(nickname) "401 " + nickname + " :No such nick/channel" + EOL
-#define ERR_NOSUCHCHANNEL(channel) "403 " + channel + " :No such channel" + EOL
-#define ERR_CANNOTSENDTOCHAN(channel) "404 " + channel + " :Cannot send to channel" + EOL
-#define ERR_NICKNAMEINUSE(nickname) ": 433 " + nickname + " :Nickname is already in use" + EOL
-#define ERR_USRNAMEINUSE(username) ": 433 " + username + " :Username is already in use" + EOL
-#define ERR_NEEDMOREPARAMS(command) "461 " + command + " :Not enough parameters" + EOL
-#define ERR_ALREADYINVITED(nickname) "467 :" + nickname + " Already invited" + EOL
-#define ERR_CHANPRIVSNEEDED(channel) "482 " + channel + " :You're not channel operator" + EOL
-#define ERR_NOTONCHANNEL(channel) "442 " + channel + " :You're not on that channel" + EOL
-#define ERR_NOTOPIC(nickname, channel) ": 331 " + nickname + " " + channel + " :No topic is set" + EOL
+#define ERR_NOSUCHNICK(nickname) ":localhost 401 " + nickname + " : No such nick/channel" + EOL
+#define ERR_NOSUCHCHANNEL(channel) ":localhost 403 " + channel + " : No such channel" + EOL
+#define ERR_CANNOTSENDTOCHAN(channel) ":localhost 404 " + channel + " : Cannot send to channel" + EOL
+#define ERR_NICKNAMEINUSE(nickname) ":localhost 433 " + nickname + " : Nickname is already in use" + EOL
+#define ERR_USRNAMEINUSE(username) ":localhost 433 " + username + " : Username is already in use" + EOL
+#define ERR_NEEDMOREPARAMS(command) ":localhost 461 " + command + " : Not enough parameters" + EOL
+#define ERR_ALREADYINVITED(nickname) ":localhost 467 :" + nickname + " Already invited" + EOL
+#define ERR_CHANPRIVSNEEDED(channel) ":localhost 482 " + channel + " : You're not channel operator" + EOL
+#define ERR_NOTONCHANNEL(channel) ":localhost 442 " + channel + " : You're not on that channel" + EOL
+#define ERR_NOTOPIC(nickname, channel) ":localhost 331 " + nickname + " " + channel + " : No topic is set" + EOL
 
 
-#define ERR_NOTINVITED(nickname, channel) ":localhost 473 " + nickname + " " + channel + " :Cannot join channel (+i)" + EOL
-#define ERR_PASSWDMISMATCH(nickname, channel) ":localhost 475 :" + nickname + " " + channel + " :Cannot join channel (+k) - bad key" + EOL
-#define ERR_CHANLISFULL(nickname, channel) ":localhost 471 " + nickname + " " + channel + " :Cannot join channel (+l)" + EOL
+#define ERR_NOTINVITED(nickname, channel) ":localhost 473 " + nickname + " " + channel + " :C annot join channel (+i)" + EOL
+#define ERR_PASSWDMISMATCH(nickname, channel) ":localhost 475 :" + nickname + " " + channel + " : Cannot join channel (+k) - bad key" + EOL
+#define ERR_CHANLISFULL(nickname, channel) ":localhost 471 " + nickname + " " + channel + " : Cannot join channel (+l)" + EOL
 
 #endif

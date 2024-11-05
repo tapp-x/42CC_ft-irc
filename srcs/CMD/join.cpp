@@ -51,7 +51,17 @@ void	Server::checkPermToJoin(Client *client, Channel *chan, std::vector<std::str
 		std::cout << MSG_JOIN(client->get_nickname(), client->get_username(), chan->getName()) << std::endl;
 		client->sendMessage(MSG_JOIN(client->get_nickname(), client->get_username(), chan->getName()));
 		chan->sendMsgToAll(client, "has joined the channel.");
-		who_cmd(client, cmd_split);
+		{
+			client->sendMessage(WHO_START(client->get_nickname(), chan->getName()));
+			chan->sendRespToAll(client, WHO_START(client->get_nickname(), chan->getName()));
+			for (size_t j = 0; j < chan->getNbClients(); j++)
+			{
+				client->sendMessage(chan->isAdmin(chan->getClients()[j]) ? WHO_OP(chan->getClients()[j]->get_nickname()) : WHO_USER(chan->getClients()[j]->get_nickname()));
+				chan->sendRespToAll(client, chan->isAdmin(chan->getClients()[j]) ? WHO_OP(chan->getClients()[j]->get_nickname()) : WHO_USER(chan->getClients()[j]->get_nickname()));
+			}
+			client->sendMessage(WHO_END(client->get_nickname(), chan->getName()));
+			chan->sendRespToAll(client, WHO_END(client->get_nickname(), chan->getName()));
+		}
 	}
 }
 

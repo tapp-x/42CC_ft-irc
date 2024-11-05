@@ -33,8 +33,8 @@ void	Server::kick_cmd(Client *client, const std::string &cmd) {
 	std::string channelName = cmd_split[1];
 	std::string nickname = cmd_split[2];
 	std::string reason = "Kicked";
-	if (!cmd_split[3].empty())
-		std::string reason = cmd_split[3];
+	if (cmd_split.size() > 3)
+		reason = cmd_split[3];
 	Channel *channel = get_channel(channelName);
 	if (!channel) {
 		client->sendMessage(ERR_NOSUCHCHANNEL(channelName));
@@ -61,9 +61,8 @@ void	Server::kick_cmd(Client *client, const std::string &cmd) {
 		client->sendMessage(ERR_CHANPRIVSNEEDED(channelName));
 		return ;
 	}
+	channel->sendRespToAll(client, MSG_KICK(client->get_nickname(), client->get_username(), channel->getName(), target->get_nickname(), reason));
+	client->sendMessage(MSG_KICK(client->get_nickname(), client->get_username(), channel->getName(), target->get_nickname(), reason));
 	channel->removeClient(target);
 	channel->removeAdmin(target);
-	std::string msg = MSG_KICK(client->get_nickname(), channelName, reason);
-	channel->sendRespToAll(client, msg);
-	client->sendMessage(msg);
 }
