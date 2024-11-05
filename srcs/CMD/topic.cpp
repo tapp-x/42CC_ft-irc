@@ -88,6 +88,10 @@ void	Server::topic_cmd(Client *client, const std::string &cmd) {
 		show_topic(client, channelName, channel);
 		return ;
 	}
+	if (channel->isTopicRestricted() && !channel->isAdmin(client)) {
+		client->sendMessage(ERR_CHANPRIVSNEEDED(channelName));
+		return;
+	}
 	if (cmd_split.size() == 3) {
 		if (cmd_split[2][0] == ':')
 			cmd_split[2] = cmd_split[2].substr(1);
