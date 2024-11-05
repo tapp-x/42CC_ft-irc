@@ -15,7 +15,7 @@
 
 #define EOL "\r\n"
 
-#define MSG_WELCOME "Welcome to IRC network !\r\n"
+#define MSG_WELCOME(nickname) ":localhost 001 " + nickname + " :Welcome to IRC network !\r\n"
 #define MSG_NICK(nickname) "Your nickname is " + nickname + EOL
 #define MSG_USER(username) "Your username is " + username + EOL
 #define MSG_YOURHOST(host) "Your host is " + host + EOL
@@ -30,10 +30,10 @@
 #define MSG_TOPIC(nickname, channel, topic) ":" + nickname + " TOPIC " + channel + " :" + topic + EOL
 #define MSG_TOPICTIME(nickname, channel, time) ": 333 " + nickname + " " + channel + " " + nickname + " " + time + EOL
 #define MSG_CHANMODE(nickname, channel, mode, args) ":" + nickname + " MODE " + channel + " " + mode + " " + args + EOL
-#define WHO_START(nickname, channel) ": 353 " + nickname + " @ " + channel + " :"
+#define WHO_START(nickname, channel) ":localhost 353 " + nickname + " @ " + channel + " :"
 #define WHO_OP(nickname) "@" + nickname + " "
 #define WHO_USER(nickname) "+" + nickname + " "
-#define WHO_END(nickname, channel) "\r\n: 366 " + nickname + " " + channel + " :END of /NAMES list" + EOL
+#define WHO_END(nickname, channel) "\r\n:localhost 366 " + nickname + " " + channel + " :END of /NAMES list" + EOL
 
 #define RPL_INVITING(sender, receiver, channel) "341 " + sender + " " + receiver + " " + channel + EOL
 #define RPL_INVITED(receiver, channel) ":" + receiver + "!" + receiver + " INVITE " + receiver + " " + channel + EOL
