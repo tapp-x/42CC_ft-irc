@@ -32,8 +32,8 @@ void	Server::quit_cmd(Client *client, const std::string &cmd) {
 		_channels[i]->removeClient(client);
 		_channels[i]->removeAdmin(client);
 		if (_channels[i]->getNbClients() == 0) {
-			_channels.erase(_channels.begin() + i);
 			delete _channels[i];
+			_channels.erase(_channels.begin() + i);
 		}
 		else {
 			// std::cout << "Sending leaving message to all clients in channel " << _channels[i]->getName() <<
