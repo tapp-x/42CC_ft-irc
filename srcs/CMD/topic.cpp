@@ -6,7 +6,7 @@
 /*   By: tappourc <tappourc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 19:17:08 by tappourc          #+#    #+#             */
-/*   Updated: 2024/10/31 19:45:26 by tappourc         ###   ########.fr       */
+/*   Updated: 2024/11/06 14:53:41 by tappourc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ void	Server::show_topic(Client *client, std::string &channel, Channel *chan) {
 }
 
 void Server::change_topic_cmd(Client *client, const std::string &cmd, const std::vector<std::string> &cmd_split, Channel *channel) {
-	std::cout << "CHANGE TOPIC CMD =======:"<<std::endl;
 	std::string channelName = cmd_split[1];
 	std::string tmp;
 	tmp = cmd.substr(cmd_split[0].length() + cmd_split[1].length() + 1);
@@ -63,7 +62,7 @@ void Server::change_topic_cmd(Client *client, const std::string &cmd, const std:
 	std::string topicMessage = MSG_TOPIC(client->get_nickname(), channelName, newTopic);
 	std::cout << "TOPIC MESSAGE CHANGE ----->: " << topicMessage << std::endl;
 	channel->sendRespToAll(client, topicMessage);
-	// client->sendMessage(MSG_TOPIC(client->get_nickname(), channelName, newTopic));
+	client->sendMessage(MSG_TOPIC(client->get_nickname(), channelName, newTopic));
 }
 
 void	Server::topic_cmd(Client *client, const std::string &cmd) {

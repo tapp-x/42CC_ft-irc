@@ -6,7 +6,7 @@
 /*   By: tappourc <tappourc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 19:19:44 by tappourc          #+#    #+#             */
-/*   Updated: 2024/11/06 10:32:49 by tappourc         ###   ########.fr       */
+/*   Updated: 2024/11/06 14:49:55 by tappourc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,18 +34,20 @@ void	Server::setKeyMode(Client *client, const std::string &channelName, char mod
 	Channel *channel = get_channel(channelName);
 	if (!channel)
 		return;
+	std::string clean_key = key;
+	clean_key.erase(clean_key.find_last_not_of(" \n\r\t") + 1);
 	std::string mode_str;
 	if (mode == '+') {
 		mode_str = "+k";
-		channel->setKey(key);
+		channel->setKey(clean_key);
 		channel->setIsKey(true);
 	} else {
 		mode_str = "-k";
 		channel->setKey("");
 		channel->setIsKey(false);
 	}
-	client->sendMessage(MSG_CHANMODE(client->get_nickname(), channelName, mode_str, key));
-	channel->sendRespToAll(client, MSG_CHANMODE(client->get_nickname(), channelName, mode_str, key));
+	client->sendMessage(MSG_CHANMODE(client->get_nickname(), channelName, mode_str, clean_key));
+	channel->sendRespToAll(client, MSG_CHANMODE(client->get_nickname(), channelName, mode_str, clean_key));
 }
 
 void	Server::setLimitMode(Client *client, const std::string &channelName, char mode, std::string limit_str) {
