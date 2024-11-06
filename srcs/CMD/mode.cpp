@@ -6,7 +6,7 @@
 /*   By: tappourc <tappourc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 19:19:44 by tappourc          #+#    #+#             */
-/*   Updated: 2024/10/31 23:00:23 by tappourc         ###   ########.fr       */
+/*   Updated: 2024/11/06 10:32:49 by tappourc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,9 @@ void	Server::setOperatorMode(Client *client_sender, const std::string &channelNa
 	Channel *channel = get_channel(channelName);
 	if (!channel)
 		return;
-	Client *client = get_client_by_nick(nickname);
+	std::string clean_nickname = nickname;
+	clean_nickname.erase(clean_nickname.find_last_not_of(" \n\r\t") + 1);
+	Client *client = get_client_by_nick(clean_nickname);
 	if (!client)
 		return;
 	std::string mode_str;
@@ -103,8 +105,20 @@ void	Server::setOperatorMode(Client *client_sender, const std::string &channelNa
 		mode_str = "-o";
 		channel->removeAdmin(client);
 	}
-	client_sender->sendMessage(MSG_CHANMODE(client->get_nickname(), channelName, mode_str, nickname));
-	channel->sendRespToAll(client, MSG_CHANMODE(client->get_nickname(), channelName, mode_str, nickname));
+	
+	client_sender->sendMessage(MSG_CHANMODE(client->get_nickname(), channelName, mode_str, clean_nickname));
+	channel->sendRespToAll(client_sender, MSG_CHANMODE(client->get_nickname(), channelName, mode_str, clean_nickname));
+	{
+		client_sender->sendMessage(WHO_START(client_sender->get_nickname(), channel->getName()));
+		channel->sendRespToAll(client_sender, WHO_START(client_sender->get_nickname(), channel->getName()));
+		for (size_t j = 0; j < channel->getNbClients(); j++)
+		{
+			client_sender->sendMessage(channel->isAdmin(channel->getClients()[j]) ? WHO_OP(channel->getClients()[j]->get_nickname()) : WHO_USER(channel->getClients()[j]->get_nickname()));
+			channel->sendRespToAll(client_sender, channel->isAdmin(channel->getClients()[j]) ? WHO_OP(channel->getClients()[j]->get_nickname()) : WHO_USER(channel->getClients()[j]->get_nickname()));
+		}
+		client_sender->sendMessage(WHO_END(client_sender->get_nickname(), channel->getName()));
+		channel->sendRespToAll(client_sender, WHO_END(client_sender->get_nickname(), channel->getName()));
+	}
 }
 
 void Server::mode_cmd(Client *client, const std::string &cmd) {
