@@ -143,10 +143,20 @@ void	Tcp::handleClientMessage(int clientFd) {
 		// std::cout << "Error or client disconnected with fd " << clientFd << std::endl;
 		removeClient(clientFd);
 	} else if (bytesRead == 1 && buffer[0] == '\n') {
+		std::string cmd = this->_server->get_client(clientFd)->get_cmdBuff();
+		if (cmd.size() > 1)
+			this->_server->exec_cmd(cmd + buffer, clientFd);
 		return ;
 	} else {
 		std::string message(buffer, bytesRead);
+		if (message[message.size() - 1] != '\n')
+		{
+			this->_server->get_client(clientFd)->set_cmdBuff(this->_server->get_client(clientFd)->get_cmdBuff() + message.substr(0, message.size()));
+		}
+		else {
+			std::string cmd = this->_server->get_client(clientFd)->get_cmdBuff() + buffer;
+			this->_server->exec_cmd(cmd, clientFd);
+		}
 		// std::cout << "Received message from client " << clientFd << ": " << message << std::endl;
-		this->_server->exec_cmd(message, clientFd);
 	}
 }
