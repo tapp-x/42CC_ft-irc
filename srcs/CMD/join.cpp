@@ -6,7 +6,7 @@
 /*   By: tappourc <tappourc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 20:01:30 by tappourc          #+#    #+#             */
-/*   Updated: 2024/11/06 15:13:27 by tappourc         ###   ########.fr       */
+/*   Updated: 2024/11/12 19:47:24 by tappourc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 void	Server::checkPermToJoin(Client *client, Channel *chan, std::vector<std::string> &cmd_split) {
 	bool canJoin = true;
 	if (chan->isWithKey() == true) {
-		std::string trykey = cmd_split[2];
-		trykey.erase(trykey.find_last_not_of(" \n\r\t") + 1);
 		if (cmd_split.size() == 3) {
+			std::string trykey = cmd_split[2];
+			trykey.erase(trykey.find_last_not_of(" \n\r\t") + 1);
 			if (trykey != chan->getKey()) {
 				canJoin = false;
 				client->sendMessage(ERR_PASSWDMISMATCH(client->get_nickname(), chan->getName()));

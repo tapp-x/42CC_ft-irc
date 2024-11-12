@@ -6,7 +6,7 @@
 /*   By: tappourc <tappourc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/29 10:49:41 by tappourc          #+#    #+#             */
-/*   Updated: 2024/11/05 20:19:27 by tappourc         ###   ########.fr       */
+/*   Updated: 2024/11/12 19:45:42 by tappourc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -266,7 +266,6 @@ void Server::exec_cmd(const std::string &cmd, int fd) {
 		if (cmd_split[0] == "PASS") {
 			if (this->get_client(fd)->get_status() == REGISTERED) {
 				this->get_client(fd)->sendMessage("ERROR : Already registered\r\n");
-				this->get_client(fd)->set_cmdBuff("");
 				continue ;
 			}
 			pass_cmd(this->get_client(fd), cmd_split);
@@ -276,13 +275,11 @@ void Server::exec_cmd(const std::string &cmd, int fd) {
 			std::cout << "Client not registered" << std::endl;
 			if (cmd_split[0] != "CAP")
 				this->get_client(fd)->sendMessage("ERROR : You must be registered to use this server\r\n");
-			this->get_client(fd)->set_cmdBuff("");
 			continue ;
 		}
 		if (cmd_split[0] == "NICK") {
 			if (cmd_split.size() == 1) {
 				this->get_client(fd)->sendMessage("ERROR : You must provide a valid nickname\r\n");
-				this->get_client(fd)->set_cmdBuff("");
 				continue ;
 			}
 			nick_cmd(this->get_client(fd), cmd_split[1]);
@@ -291,16 +288,14 @@ void Server::exec_cmd(const std::string &cmd, int fd) {
 		if (cmd_split[0] == "USER") {
 			if (cmd_split.size() == 1) {
 				this->get_client(fd)->sendMessage("ERROR : You must provide a valid username\r\n");
-				this->get_client(fd)->set_cmdBuff("");
 				continue ;
 			}
 			user_cmd(this->get_client(fd), cmd_split[1]);
 			continue ;
 		}
-		if (this->get_client(fd)->get_nickname().length() < 1 && this->get_client(fd)->get_username().length() < 1) {
+		if (this->get_client(fd)->get_nickname().length() < 1 || this->get_client(fd)->get_username().length() < 1) {
 			std::cout << "Client not identified" << std::endl;
 			this->get_client(fd)->sendMessage("ERROR : You must be identified to use this server, use <NICK> and <USER>\r\n");
-			this->get_client(fd)->set_cmdBuff("");
 			continue ;
 		}
 		if (cmd_split[0] == "JOIN") {
